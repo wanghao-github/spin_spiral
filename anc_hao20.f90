@@ -1,6 +1,7 @@
 program anomalous_nernst_effect
 !*************************************************                      
 !rewrite by HaoWang March 7 2023 replace momentum2 by wt
+!modify 2024/8/8 
 !*************************************************                      
     implicit none                                                      
     complex,allocatable:: hops   (:,:,:),spin_dir(:,:),spin_dir_mpi(:,:),spin_dir_mpi2(:,:)
