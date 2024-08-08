@@ -720,7 +720,7 @@ program anomalous_nernst_effect
         ! write(*,*) "efermi= ", efermi
         ! write(*,*) "Beta_fake= ", Beta_fake
         ! write(*,*) "fermi(eigvals-efermi, Beta_fake) is ", fermi(eigvals-efermi, Beta_fake)
-        ! write(*,*) "irank = ",irank, "rho is " , rho 
+        write(*,*) "irank = ",irank, "rho is " , rho 
         spin_sigma_x_comp = 0.0d0
         spin_sigma_y_comp = 0.0d0
         spin_sigma_z_comp = 0.0d0
