@@ -88,7 +88,7 @@
       real(kind(1.0d0)) :: trace_value
 
 
-      real :: matrix(4, 4)
+      real :: test_matrix(4, 4)
 
       INCLUDE 'mpif.h' 
       integer stt(MPI_STATUS_SIZE) 
