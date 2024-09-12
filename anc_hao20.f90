@@ -712,15 +712,16 @@ program anomalous_nernst_effect
         if(info.ne.0)stop 'zheevx'                              
 
         eigvecs_dag=conjg(transpose(eigvecs))
-
         rho(:,:) = rho(:,:) +MATMUL(eigvecs * fermi(eigvals-efermi, Beta_fake), eigvecs_dag)*(1/knv3)
+        ! rho(:,:) = rho(:,:) +MATMUL(eigvecs * fermi(eigvals-efermi, Beta_fake), eigvecs_dag)*(1/knv3)
         ! write(*,*) "knv3", knv3
         ! write(*,*) "eigvecs= ", eigvecs 
         ! write(*,*) "eigvals= ", eigvals
         ! write(*,*) "efermi= ", efermi
         ! write(*,*) "Beta_fake= ", Beta_fake
-        write(*,*) "fermi(eigvals-efermi, Beta_fake) is ", fermi(eigvals-efermi, Beta_fake)
         write(*,*) "irank = ",irank, "rho is " , rho 
+        write(*,*) "fermi(eigvals-efermi, Beta_fake) is ", fermi(eigvals-efermi, Beta_fake)
+        
         spin_sigma_x_comp = 0.0d0
         spin_sigma_y_comp = 0.0d0
         spin_sigma_z_comp = 0.0d0
