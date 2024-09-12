@@ -110,6 +110,7 @@
          read(300,*)amat(2,:) 
          read(300,*)amat(3,:) 
          read(300,*)fermi_min,fermi_max,num_steps 
+         read(300,*)efermi
          read(300,*)Nk1,Nk2,Nk3 
          read(300,*)maxdim 
          read(300,*)occupation_number 
