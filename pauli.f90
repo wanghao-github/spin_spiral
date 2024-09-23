@@ -1,4 +1,4 @@
-module pauli
+module pauli_comp
     implicit none
     ! 定义双精度浮点数类型
     integer, parameter :: dp = selected_real_kind(15, 307)

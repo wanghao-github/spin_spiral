@@ -3,7 +3,7 @@
 !rewrite by HaoWang March 7 2023 replace momentum2 by wt
 !*************************************************     
       use mpi     
-      use pauli            
+      use pauli_comp            
       implicit none 
                                                                         
       complex,allocatable:: hops   (:,:,:) 
@@ -54,7 +54,7 @@
       complex,allocatable:: spinmomentum2(:,:,:) 
       
 
-      integer,parameter :: Dp=kind(1.0d0)      
+      ! integer,parameter :: Dp=kind(1.0d0)      
       complex            :: berry 
                                                                         
       integer,allocatable:: sortarray(:),mag_wann_orbs_index(:)
