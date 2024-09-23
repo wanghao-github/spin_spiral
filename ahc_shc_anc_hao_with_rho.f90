@@ -1,11 +1,10 @@
-! ahc_shc_anc_hao_with_rho.f90
 program ahc_shc_anc_hao
     use mpi
-    use pauli
+    use pauli  ! 使用 pauli 模块，其中定义了 dp
     implicit none
 
-    ! 定义参数
-    integer, parameter :: dp = kind(1.0d0)
+    ! 现在，dp 是从 pauli 模块中获取的，无需在主程序中重新定义
+    ! integer, parameter :: dp = kind(1.0d0)  ! 已移除
 
     ! 声明变量
     complex(kind=dp), allocatable :: hops(:,:,:)
@@ -240,7 +239,8 @@ program ahc_shc_anc_hao
         length = num_wann * num_wann * rvecnum * 3 
         call MPI_BCAST(rspauli, length, MPI_DOUBLE_COMPLEX, 0, MPI_COMM_WORLD, ierr)                             
     endif 
-                                                                                                                            
+                                                                                                
+
     cross_vec(1) = amat(1, 2) * amat(2, 3) - amat(1, 3) * amat(2, 2) 
     cross_vec(2) = amat(1, 3) * amat(2, 1) - amat(1, 1) * amat(2, 3) 
     cross_vec(3) = amat(1, 1) * amat(2, 2) - amat(1, 2) * amat(2, 1) 
@@ -561,6 +561,7 @@ end program ahc_shc_anc_hao
 
 ! fermi函数定义
 function fermi(omega, Beta_fake) result(value)
+    use pauli  ! 使用 pauli 模块以获取 dp
     implicit none
     real(kind=dp), intent(in) :: omega
     real(kind=dp), intent(in) :: Beta_fake
@@ -588,6 +589,7 @@ end subroutine now
 
 ! 矩阵乘法子程序
 subroutine mat_mul(nmatdim, A, B, C)
+    use pauli  ! 使用 pauli 模块以获取 dp
     implicit none
     integer, intent(in) :: nmatdim
     complex(kind=dp), intent(in) :: A(nmatdim, nmatdim)
@@ -595,8 +597,8 @@ subroutine mat_mul(nmatdim, A, B, C)
     complex(kind=dp), intent(out) :: C(nmatdim, nmatdim)
     complex(kind=dp) :: ALPHA, BETA
 
-    ALPHA = 1.0_dp
-    BETA = 0.0_dp
+    ALPHA = (1.0_dp, 0.0_dp)
+    BETA = (0.0_dp, 0.0_dp)
 
     C = (0.0_dp, 0.0_dp)
 

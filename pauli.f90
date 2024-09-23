@@ -1,7 +1,7 @@
-! pauli.f90
 module pauli
     implicit none
-    integer, parameter :: dp = kind(1.0d0)  ! 双精度
+    ! 定义双精度浮点数类型
+    integer, parameter :: dp = selected_real_kind(15, 307)
 
 contains
 
@@ -16,12 +16,6 @@ contains
         real(kind=dp) :: My(size/2, size/2)
         real(kind=dp) :: Mz(size/2, size/2)
         real(kind=dp) :: trace_value
-
-        ! 参数检查
-        if (mod(size, 2) /= 0) then
-            print *, "Error: size must be even."
-            stop
-        end if
 
         nwann_2 = size / 2
 
