@@ -8,14 +8,14 @@ contains
     subroutine pauli_block_all(M, size, pauli_result)
         implicit none
         integer, intent(in) :: size
-        real(kind=dp), intent(in) :: M(size, size)
-        real(kind=dp), intent(out) :: pauli_result(4)
+        complex(kind(1.0d0)), intent(in) :: M(size, size)
+        complex(kind(1.0d0)), intent(out) :: pauli_result(4)
         integer :: nwann_2
-        real(kind=dp) :: MI(size/2, size/2)
-        real(kind=dp) :: Mx(size/2, size/2)
-        real(kind=dp) :: My(size/2, size/2)
-        real(kind=dp) :: Mz(size/2, size/2)
-        real(kind=dp) :: trace_value
+        complex(kind(1.0d0)) :: MI(size/2, size/2)
+        complex(kind(1.0d0)) :: Mx(size/2, size/2)
+        complex(kind(1.0d0)) :: My(size/2, size/2)
+        complex(kind(1.0d0)) :: Mz(size/2, size/2)
+        complex(kind(1.0d0)) :: trace_value
 
         nwann_2 = size / 2
 
@@ -39,8 +39,8 @@ contains
 
     subroutine trace(M, trace_value)
         implicit none
-        real(kind=dp), intent(in) :: M(:,:)
-        real(kind=dp), intent(out) :: trace_value
+        complex(kind(1.0d0)), intent(in) :: M(:,:)
+        complex(kind(1.0d0)), intent(out) :: trace_value
         integer :: i, n
 
         n = size(M, 1)
