@@ -3,9 +3,6 @@ program ahc_shc_anc_hao
     use pauli  ! 使用 pauli 模块，其中定义了 dp
     implicit none
 
-    ! 现在，dp 是从 pauli 模块中获取的，无需在主程序中重新定义
-    ! integer, parameter :: dp = kind(1.0d0)  ! 已移除
-
     ! 声明变量
     complex(kind=dp), allocatable :: hops(:,:,:)
     complex(kind=dp), allocatable :: rsnabla(:,:,:,:)
@@ -217,7 +214,7 @@ program ahc_shc_anc_hao
     call MPI_BCAST(irvec, length, MPI_INTEGER, 0, MPI_COMM_WORLD, ierr)                             
             
     if (.not. allocated(crvec)) allocate(crvec(3, rvecnum))
-    call MPI_BCAST(crvec, length, MPI_DOUBLE_PRECISION, 0, MPI_COMM_WORLD, ierr)
+    call MPI_BCAST(crvec, 3*rvecnum, MPI_DOUBLE_PRECISION, 0, MPI_COMM_WORLD, ierr)
     
     if (.not. allocated(hops)) allocate(hops(num_wann, num_wann, rvecnum)) 
     length = num_wann * num_wann * rvecnum 
@@ -380,7 +377,7 @@ program ahc_shc_anc_hao
 
         call zheevx('V', 'A', 'U', num_wann, ham, num_wann, vl, vu, 1, num_wann, abstol, ne, &
                    eigvals, eigvecs, num_wann, work, lwork, rwork, iwork, ifail, info)                        
-        if (info /= 0) stop 'zheevx'                              
+        if (info /= 0) stop 'zheevx'                            
 
         eigvecs_dag = conjg(transpose(eigvecs))
         rho = rho + matmul(eigvecs * fermi(eigvals - efermi, Beta_fake), eigvecs_dag) * (1.0_dp / knv3)
@@ -544,7 +541,7 @@ program ahc_shc_anc_hao
             write(321,*) "************************************"                                                  
         end do 
         close(unit=321)  
-    
+
         open(unit=458, file='charge_on_each_atom', recl=10000) 
         do m = 1, 4
             write(458,*) "m= ", m
@@ -578,6 +575,7 @@ end function fermi
 
 ! 时间获取子程序
 subroutine now(time_now)
+    use pauli  ! 使用 pauli 模块以获取 dp
     implicit none
     integer :: time_new(8)
     real(kind=dp), intent(out) :: time_now
