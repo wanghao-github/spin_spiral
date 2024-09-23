@@ -520,8 +520,8 @@
 
    num_steps_tot =num_steps*3       
    
-   call MPI_REDUCE(rho,rho_mpi,size(rho),MPI_DOUBLE_PRECISION,MPI_SUM,0,mpi_comm_world,ierr) 
-
+   ! call MPI_REDUCE(rho,rho_mpi,size(rho),MPI_DOUBLE_PRECISION,MPI_SUM,0,mpi_comm_world,ierr) 
+   call MPI_REDUCE(rho, rho_mpi, size(rho), MPI_DOUBLE_COMPLEX, MPI_SUM, 0, MPI_COMM_WORLD, ierr)
    call MPI_REDUCE(sigma_tensor_ahc_mpi,sigma_tensor_ahc_mpi2,num_steps_tot,MPI_DOUBLE_PRECISION,MPI_SUM,0,mpi_comm_world,ierr)
    call MPI_REDUCE(sigma_tensor_shc_mpi,sigma_tensor_shc_mpi2,num_steps_tot,MPI_DOUBLE_PRECISION,MPI_SUM,0,mpi_comm_world,ierr)
 
@@ -642,13 +642,13 @@ subroutine pauli_block_all(M,size,pauli_result)
    implicit none
    integer,  intent(in)  :: size
    integer :: nwann_2
-   real(kind(1.0d0)), intent(in)  :: M(size,size)
-   real(kind(1.0d0)), intent(out) :: pauli_result(4)
-   real(kind(1.0d0)) :: MI(size/2,size/2)
-   real(kind(1.0d0)) :: Mx(size/2,size/2)
-   real(kind(1.0d0)) :: My(size/2,size/2)
-   real(kind(1.0d0)) :: Mz(size/2,size/2)
-   real(kind(1.0d0)) :: trace_value
+   complex(kind(1.0d0)), intent(in)  :: M(size,size)
+   complex(kind(1.0d0)), intent(out) :: pauli_result(4)
+   complex(kind(1.0d0)) :: MI(size/2,size/2)
+   complex(kind(1.0d0)) :: Mx(size/2,size/2)
+   complex(kind(1.0d0)) :: My(size/2,size/2)
+   complex(kind(1.0d0)) :: Mz(size/2,size/2)
+   complex(kind(1.0d0)) :: trace_value
    nwann_2 = size/2
    MI = 0.0
    Mx = 0.0
@@ -673,8 +673,8 @@ end subroutine pauli_block_all
 
 subroutine trace(M, trace_value)
      implicit none
-     real(kind(1.0d0)), intent(in) :: M(:,:)
-     real(kind(1.0d0)), intent(out) :: trace_value
+     complex(kind(1.0d0)), intent(in) :: M(:,:)
+     complex(kind(1.0d0)), intent(out) :: trace_value
      integer :: i, n
 
      n = size(M, 1)
