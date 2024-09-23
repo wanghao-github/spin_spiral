@@ -86,8 +86,8 @@
       real(kind(1.0d0)) :: K3D_vec2_cube(3)
       real(kind(1.0d0)) :: K3D_vec3_cube(3)
 
-      real(kind(1.0d0)) :: pauli_result(4)
-      real(kind(1.0d0)) :: trace_value
+      complex(kind(1.0d0)) :: pauli_result(4)
+      complex(kind(1.0d0)) :: trace_value
 
 
       real :: test_matrix(4, 4)
