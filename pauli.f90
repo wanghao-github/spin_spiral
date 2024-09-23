@@ -1,57 +1,60 @@
+! pauli.f90
 module pauli
+    implicit none
+    integer, parameter :: dp = kind(1.0d0)  ! 双精度
 
-!*************************************************                      
-!write by HaoWang September 22 2024
-!*************************************************                      
-      implicit none 
+contains
 
-
-
-      subroutine pauli_block_all(M,size,pauli_result)
-    
+    subroutine pauli_block_all(M, size, pauli_result)
         implicit none
-        integer,  intent(in)  :: size
+        integer, intent(in) :: size
+        real(kind=dp), intent(in) :: M(size, size)
+        real(kind=dp), intent(out) :: pauli_result(4)
         integer :: nwann_2
-        real(kind(1.0d0)), intent(in)  :: M(size,size)
-        real(kind(1.0d0)), intent(out) :: pauli_result(4)
-        real(kind(1.0d0)) :: MI(size/2,size/2)
-        real(kind(1.0d0)) :: Mx(size/2,size/2)
-        real(kind(1.0d0)) :: My(size/2,size/2)
-        real(kind(1.0d0)) :: Mz(size/2,size/2)
-        real(kind(1.0d0)) :: trace_value
-        nwann_2 = size/2
-        MI = 0.0
-        Mx = 0.0
-        My = 0.0
-        Mz = 0.0
-     
-        MI = (M(1:nwann_2:1, 1:nwann_2:1) + M(nwann_2+1:2*nwann_2:1, nwann_2+1:2*nwann_2:1)) / 2.0
-        Mx = (M(nwann_2+1:2*nwann_2:1, 1:nwann_2:1) + M(1:nwann_2:1, nwann_2+1:2*nwann_2:1)) / 2.0
-        My = (M(nwann_2+1:2*nwann_2:1, 1:nwann_2:1) - M(1:nwann_2:1, nwann_2+1:2*nwann_2:1)) * 0.5 * (0.0, 1.0)
-        Mz = (M(1:nwann_2:1, 1:nwann_2:1) - M(nwann_2+1:2*nwann_2:1, nwann_2+1:2*nwann_2:1)) / 2.0
-     
-       call trace(MI, trace_value)
-       pauli_result(1) = trace_value
-       call trace(Mx, trace_value)
-       pauli_result(2) = trace_value
-       call trace(My, trace_value)
-       pauli_result(3) = trace_value
-       call trace(Mz, trace_value)
-       pauli_result(4) = trace_value
-     
-     end subroutine pauli_block_all
-     
-     subroutine trace(M, trace_value)
-          implicit none
-          real(kind(1.0d0)), intent(in) :: M(:,:)
-          real(kind(1.0d0)), intent(out) :: trace_value
-          integer :: i, n
-     
-          n = size(M, 1)
-          trace_value = 0.0
-     
-         do i = 1, n
-             trace_value = trace_value + M(i, i)
-         end do
-     end subroutine trace
-     
+        real(kind=dp) :: MI(size/2, size/2)
+        real(kind=dp) :: Mx(size/2, size/2)
+        real(kind=dp) :: My(size/2, size/2)
+        real(kind=dp) :: Mz(size/2, size/2)
+        real(kind=dp) :: trace_value
+
+        ! 参数检查
+        if (mod(size, 2) /= 0) then
+            print *, "Error: size must be even."
+            stop
+        end if
+
+        nwann_2 = size / 2
+
+        MI = (M(1:nwann_2, 1:nwann_2) + M(nwann_2+1:2*nwann_2, nwann_2+1:2*nwann_2)) / 2.0_dp
+        Mx = (M(nwann_2+1:2*nwann_2, 1:nwann_2) + M(1:nwann_2, nwann_2+1:2*nwann_2)) / 2.0_dp
+        My = (M(nwann_2+1:2*nwann_2, 1:nwann_2) - M(1:nwann_2, nwann_2+1:2*nwann_2)) * 0.5_dp
+        Mz = (M(1:nwann_2, 1:nwann_2) - M(nwann_2+1:2*nwann_2, nwann_2+1:2*nwann_2)) / 2.0_dp
+
+        call trace(MI, trace_value)
+        pauli_result(1) = trace_value
+
+        call trace(Mx, trace_value)
+        pauli_result(2) = trace_value
+
+        call trace(My, trace_value)
+        pauli_result(3) = trace_value
+
+        call trace(Mz, trace_value)
+        pauli_result(4) = trace_value
+    end subroutine pauli_block_all
+
+    subroutine trace(M, trace_value)
+        implicit none
+        real(kind=dp), intent(in) :: M(:,:)
+        real(kind=dp), intent(out) :: trace_value
+        integer :: i, n
+
+        n = size(M, 1)
+        trace_value = 0.0_dp
+
+        do i = 1, n
+            trace_value = trace_value + M(i, i)
+        end do
+    end subroutine trace
+
+end module pauli
