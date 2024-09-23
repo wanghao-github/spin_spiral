@@ -51,4 +51,4 @@ contains
         end do
     end subroutine trace
 
-end module pauli
+end module pauli_comp
