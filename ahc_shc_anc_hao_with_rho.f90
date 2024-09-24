@@ -398,7 +398,8 @@
 
          eigvecs_dag=conjg(transpose(eigvecs))
          ! rho(:,:) = rho(:,:) +MATMUL(eigvecs * fermi(eigvals-efermi, Beta_fake), eigvecs_dag)*(1/knv3)
-         rho(:,:) = rho(:,:) + MATMUL(eigvecs, eigvecs_dag)*(1/knv3)
+         rho(:,:) = rho(:,:) + MATMUL(eigvecs, eigvecs_dag)
+         
          ! write(*,*) "knv3", knv3
          ! write(*,*) "eigvecs= ", eigvecs 
          ! write(*,*) "eigvals= ", eigvals
@@ -580,7 +581,7 @@
          open(458,file='charge_on_each_atom',recl=10000) 
          do m=1,4
              write(458,*)"m= ", m
-             write(458,*)"charge=",pauli_result(m)
+             write(458,*)"charge=",pauli_result(m)*(1/knv3)
              write(458,*)"************************************" 
          enddo
          close(458) 
