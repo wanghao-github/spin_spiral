@@ -401,7 +401,7 @@
          ! rho(:,:) = rho(:,:) +MATMUL(eigvecs * fermi(eigvals-efermi, Beta_fake), eigvecs_dag)*(1/knv3)
          ! rho(:,:) = rho(:,:) + MATMUL(eigvecs * fermi_array(eigvals-efermi, Beta_fake), eigvecs_dag)/knv3
          ! 确保 eigvecs 和 fermi_array 的维度匹配
-         rho(:,:) = rho(:,:) + matmul(eigvecs * reshape(fermi_array(eigvals-efermi, Beta_fake), [num_wann, 1]), eigvecs_dag) / knv3
+         rho(:,:) = rho(:,:) + matmul(eigvecs * fermi_array(eigvals-efermi, Beta_fake), eigvecs_dag) / knv3
 
          ! write(*,*) "knv3", knv3
          ! write(*,*) "eigvecs= ", eigvecs 
