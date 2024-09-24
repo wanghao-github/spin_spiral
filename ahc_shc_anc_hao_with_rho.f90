@@ -397,7 +397,8 @@
          
 
          eigvecs_dag=conjg(transpose(eigvecs))
-         rho(:,:) = rho(:,:) +MATMUL(eigvecs * fermi(eigvals-efermi, Beta_fake), eigvecs_dag)*(1/knv3)
+         ! rho(:,:) = rho(:,:) +MATMUL(eigvecs * fermi(eigvals-efermi, Beta_fake), eigvecs_dag)*(1/knv3)
+         rho(:,:) = rho(:,:) + MATMUL(eigvecs, eigvecs_dag)
          ! write(*,*) "knv3", knv3
          ! write(*,*) "eigvecs= ", eigvecs 
          ! write(*,*) "eigvals= ", eigvals
