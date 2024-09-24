@@ -402,10 +402,10 @@
          
          ! write(*,*) "knv3", knv3
          ! write(*,*) "eigvecs= ", eigvecs 
-         ! write(*,*) "eigvals= ", eigvals
-         ! write(*,*) "efermi= ", efermi
+         write(*,*) "eigvals= ", eigvals
+         write(*,*) "efermi= ", efermi
          ! write(*,*) "Beta_fake= ", Beta_fake
-         write(*,*) "fermi(eigvals-efermi, Beta_fake) is ", fermi(eigvals-efermi, Beta_fake)
+         ! write(*,*) "fermi(eigvals-efermi, Beta_fake) is ", fermi(eigvals-efermi, Beta_fake)
          write(*,*) "irank = ", irank
          write(*,*) "1/knv3 is " , 1/knv3 
          ! write(*,*) "rho is " , rho 
