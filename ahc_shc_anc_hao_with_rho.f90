@@ -407,6 +407,7 @@
          ! write(*,*) "Beta_fake= ", Beta_fake
          ! write(*,*) "fermi(eigvals-efermi, Beta_fake) is ", fermi(eigvals-efermi, Beta_fake)
          write(*,*) "irank = ", irank
+         write(*,*) "1/knv3 is " , 1/knv3 
          write(*,*) "rho is " , rho 
 
          momentum=0.0 
@@ -581,7 +582,7 @@
          open(458,file='charge_on_each_atom',recl=10000) 
          do m=1,4
              write(458,*)"m= ", m
-             write(458,*)"charge=",pauli_result(m)*(1/knv3)
+             write(458,*)"charge=",pauli_result(m)
              write(458,*)"************************************" 
          enddo
          close(458) 
