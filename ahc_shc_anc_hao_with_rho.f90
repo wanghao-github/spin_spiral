@@ -404,7 +404,8 @@
          ! write(*,*) "efermi= ", efermi
          ! write(*,*) "Beta_fake= ", Beta_fake
          ! write(*,*) "fermi(eigvals-efermi, Beta_fake) is ", fermi(eigvals-efermi, Beta_fake)
-         ! write(*,*) "irank = ",irank, "rho is " , rho 
+         write(*,*) "irank = ", irank
+         write(*,*) "rho is " , rho 
 
          momentum=0.0 
          do ii=1,rvecnum 
