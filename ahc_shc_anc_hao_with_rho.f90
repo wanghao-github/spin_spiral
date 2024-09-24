@@ -399,12 +399,14 @@
 
          eigvecs_dag=conjg(transpose(eigvecs))
          ! rho(:,:) = rho(:,:) +MATMUL(eigvecs * fermi(eigvals-efermi, Beta_fake), eigvecs_dag)*(1/knv3)
-         rho(:,:) = rho(:,:) + MATMUL(eigvecs * fermi(eigvals-efermi, Beta_fake), eigvecs_dag)/knv3
-         
+         ! rho(:,:) = rho(:,:) + MATMUL(eigvecs * fermi_array(eigvals-efermi, Beta_fake), eigvecs_dag)/knv3
+         ! 确保 eigvecs 和 fermi_array 的维度匹配
+         rho(:,:) = rho(:,:) + matmul(eigvecs * reshape(fermi_array(eigvals-efermi, Beta_fake), [num_wann, 1]), eigvecs_dag) / knv3
+
          ! write(*,*) "knv3", knv3
          ! write(*,*) "eigvecs= ", eigvecs 
          write(*,*) "eigvals= ", eigvals
-         write(*,*) "eigvals-efermi", eigvals-efermi
+         ! write(*,*) "eigvals-efermi", eigvals-efermi
          ! write(*,*) "efermi= ", efermi
          ! write(*,*) "Beta_fake= ", Beta_fake
          ! write(*,*) "fermi(eigvals-efermi, Beta_fake) is ", fermi(eigvals-efermi, Beta_fake)
@@ -610,6 +612,27 @@ function fermi(omega, Beta_fake) result(value)
    endif
    return
 end function fermi    
+
+
+function fermi_array(omega, Beta_fake) result(value)
+   implicit none
+   real(kind(1.0d0)), intent(in) :: omega(:)  ! omega 改为数组
+   real(kind(1.0d0)), intent(in) :: Beta_fake
+   real(kind(1.0d0)) :: value(size(omega))   ! 返回值也改为数组
+   integer :: i
+
+   do i = 1, size(omega)
+      if (Beta_fake*omega(i) .ge. 20d0) then
+         value(i) = 0.0
+      elseif (Beta_fake*omega(i) .le. -20d0) then
+         value(i) = 1.0
+      else
+         value(i) = 1.0/(1.0 + exp(Beta_fake*omega(i)))
+      endif
+   end do
+   return
+end function fermi_array
+
 
 subroutine now(time_now)
 
