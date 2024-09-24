@@ -355,16 +355,16 @@
      endif
      endif
 
-      ! time_start = 0.0
+      time_start = 0.0
       knv3= Nk1*Nk2*Nk3
-      ! call now(time_start)
+      call now(time_start)
        do ik= 1+ irank, knv3, isize
-         ! if (irank .eq. 0 .and. mod(ik/isize, 1) .eq. 0) then
-         !  call now(time_end) 
-         !   write(*, '(a, i18, "/", i18, a, f10.2, "s")') 'ik/knv3', &
-         !    ik, knv3, '  time left', (knv3-ik)*(time_end-time_start)/isize
-         !    time_start= time_end
-         ! endif
+         if (irank .eq. 0 .and. mod(ik/isize, 1) .eq. 0) then
+          call now(time_end) 
+           write(*, '(a, i18, "/", i18, a, f10.2, "s")') 'ik/knv3', &
+            ik, knv3, '  time left', (knv3-ik)*(time_end-time_start)/isize
+            time_start= time_end
+         endif
 
          ikx= (ik-1)/(nk2*nk3)+1
          iky= ((ik-1-(ikx-1)*Nk2*Nk3)/nk3)+1

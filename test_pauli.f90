@@ -2,7 +2,8 @@ PROGRAM test_pauli
  USE pauli
  implicit none
 
- REAL :: 
+ complex :: test_matrix()
+ 
 
 
  
