@@ -271,8 +271,8 @@
       5.0, 6.0, 7.0, 8.0, &
       9.0, 10.0, 11.0, 12.0, &
       13.0, 14.0, 15.0, 16.0/), (/4, 4/))
-      print *, "The 4x4 test_matrix is:"
-      print *, test_matrix
+      ! print *, "The 4x4 test_matrix is:"
+      ! print *, test_matrix
       call mpi_bcast(test_matrix,size(test_matrix),MPI_DOUBLE_PRECISION,0,mpi_comm_world,ierr)
 
       allocate( sortarray(num_steps) ) 
@@ -404,8 +404,8 @@
          ! rho(:,:) = rho(:,:) + matmul(eigvecs * diag(fermi_array(eigvals-efermi, Beta_fake)), eigvecs_dag) / knv3
          rho(:,:) = rho(:,:) + MATMUL(eigvecs, eigvecs_dag)/knv3
          ! write(*,*) "knv3", knv3
-         write(*,*) "eigvecs= ", eigvecs 
-         write(*,*) "eigvals= ", eigvals
+         ! write(*,*) "eigvecs= ", eigvecs 
+         ! write(*,*) "eigvals= ", eigvals
          ! write(*,*) "eigvals-efermi", eigvals-efermi
          ! write(*,*) "efermi= ", efermi
          ! write(*,*) "Beta_fake= ", Beta_fake
