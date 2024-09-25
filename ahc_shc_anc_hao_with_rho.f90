@@ -410,7 +410,7 @@
          ! write(*,*) "eigvals-efermi", eigvals-efermi
          ! write(*,*) "efermi= ", efermi
          ! write(*,*) "Beta_fake= ", Beta_fake
-         ! write(*,*) "fermi(eigvals-efermi, Beta_fake) is ", fermi(eigvals-efermi, Beta_fake)
+         write(*,*) "fermi_array(eigvals-efermi, Beta_fake) is ", fermi_array(eigvals-efermi, Beta_fake)
          write(*,*) "irank = ", irank
          write(*,*) "1/knv3 is " , 1/knv3 
          ! write(*,*) "rho is " , rho 
