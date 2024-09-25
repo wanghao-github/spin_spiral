@@ -25,7 +25,7 @@
       integer            :: ne,j 
       real               :: abstol,time_start,time_end ,time_start1,time_end1
       real,allocatable   :: eigvals(:) 
-      complex,allocatable:: eigvecs(:,:) ,eigvecs_dag(:,:),mat_temp(:,:)
+      complex,allocatable:: eigvecs(:,:) ,eigvecs_dag(:,:),mat_temp(:,:),eigvecs_f(:,:),temp(:,:)
       integer            :: info 
       complex,allocatable:: work(:) 
       integer            :: lwork 
@@ -405,8 +405,16 @@
          ! rho(:,:) = rho(:,:) + matmul(eigvecs * diag(fermi_array(eigvals-efermi, Beta_fake)), eigvecs_dag) / knv3
          
          fermi_values = fermi_array(eigvals-efermi, Beta_fake)
-         print *, "fermi_values:", fermi_values
-         rho(:,:) = rho(:,:) + MATMUL(eigvecs, eigvecs_dag)/knv3
+         ! print *, "fermi_values:", fermi_values
+
+         do j = 1, num_wann
+            do i = 1, num_wann
+               eigvecs_f(i, j) = eigvecs(i, j) * fermi_values(j)
+            end do
+         end do
+         temp = matmul(eigvecs_f, eigvecs_dag) / knv3
+         rho = rho + temp
+         ! rho(:,:) = rho(:,:) + MATMUL(eigvecs, eigvecs_dag)/knv3
          ! write(*,*) "no idea"
          ! write(*,*) "knv3", knv3
          ! write(*,*) "eigvecs= ", eigvecs 
