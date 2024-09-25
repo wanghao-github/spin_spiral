@@ -420,8 +420,8 @@
          print *, "here no problem2"
          write(*,*) "eigvecs_f:", eigvecs_f
          write(*,*) "temp:", temp
-         ! rho = rho + temp
-         rho(:,:) = rho(:,:) + MATMUL(eigvecs, eigvecs_dag)/knv3
+         rho = rho + temp
+         ! rho(:,:) = rho(:,:) + MATMUL(eigvecs, eigvecs_dag)/knv3
          ! write(*,*) "no idea"
          ! write(*,*) "knv3", knv3
          ! write(*,*) "eigvecs= ", eigvecs 
