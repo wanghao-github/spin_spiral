@@ -403,6 +403,7 @@
          ! 确保 eigvecs 和 fermi_array 的维度匹配
          ! rho(:,:) = rho(:,:) + matmul(eigvecs * diag(fermi_array(eigvals-efermi, Beta_fake)), eigvecs_dag) / knv3
          rho(:,:) = rho(:,:) + MATMUL(eigvecs, eigvecs_dag)/knv3
+         write(*,*) "no idea"
          ! write(*,*) "knv3", knv3
          ! write(*,*) "eigvecs= ", eigvecs 
          ! write(*,*) "eigvals= ", eigvals
