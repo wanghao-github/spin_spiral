@@ -407,7 +407,7 @@
          ! write(*,*) "knv3", knv3
          ! write(*,*) "eigvecs= ", eigvecs 
          ! write(*,*) "eigvals= ", eigvals
-         ! write(*,*) "eigvals-efermi", eigvals-efermi
+         write(*,*) "eigvals-efermi", eigvals-efermi
          ! write(*,*) "efermi= ", efermi
          ! write(*,*) "Beta_fake= ", Beta_fake
          write(*,*) "fermi_array(eigvals-efermi, Beta_fake) is ", fermi_array(eigvals-efermi, Beta_fake)
