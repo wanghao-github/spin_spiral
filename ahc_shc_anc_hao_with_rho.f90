@@ -80,8 +80,8 @@
       complex(kind(1.0d0)), allocatable :: Omega_x(:), Omega_y(:), Omega_z(:), Omega_x_shc(:), Omega_y_shc(:), Omega_z_shc(:)
       complex(kind(1.0d0)), allocatable :: Omega_x_t(:), Omega_y_t(:), Omega_z_t(:)
       complex(kind(1.0d0)), allocatable :: Omega_x_t_shc(:), Omega_y_t_shc(:), Omega_z_t_shc(:)
-      real(kind(1.0d0)) :: fermi
-      real(kind(1.0d0)) :: fermi_array
+      ! real(kind(1.0d0)) :: fermi
+      ! real(kind(1.0d0)) :: fermi_array
       real(kind(1.0d0)) :: K3D_start_cube(3)
       real(kind(1.0d0)) :: K3D_vec1_cube(3)
       real(kind(1.0d0)) :: K3D_vec2_cube(3)
