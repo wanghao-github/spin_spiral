@@ -406,14 +406,16 @@
          
          fermi_values = fermi_array(eigvals-efermi, Beta_fake)
          print *, "fermi_values:", fermi_values
-
+         print *, "here no problem0"
          do j = 1, num_wann
             do i = 1, num_wann
                eigvecs_f(i, j) = eigvecs(i, j) * fermi_values(j)
             end do
          end do
-         temp = matmul(eigvecs_f, eigvecs_dag) / knv3
 
+         print *, "here no problem1"
+         temp = matmul(eigvecs_f, eigvecs_dag) / knv3
+         print *, "here no problem2"
          write(*,*) "eigvecs_f:", eigvecs_f
          write(*,*) "temp:", temp
          ! rho = rho + temp
