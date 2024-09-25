@@ -336,6 +336,7 @@
 
       allocate(eigvals(num_wann)) 
       allocate(eigvecs(num_wann,num_wann)) 
+      allocate(eigvecs_f(num_wann,num_wann)) 
       allocate(eigvecs_dag(num_wann,num_wann))
       allocate(mat_temp(num_wann,num_wann))
       lwork=12.0*num_wann 
