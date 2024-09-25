@@ -20,4 +20,21 @@ contains
             endif
         end do
     end function fermi_array
+
+    function fermi(omega, Beta_fake) result(value)
+        implicit none
+        real(kind(1.0d0)), intent(in) :: omega
+        real(kind(1.0d0)), intent(in) :: Beta_fake
+        real(kind(1.0d0)) :: value 
+        if (Beta_fake*omega .ge. 20d0) then
+            value = 0.0
+        elseif (Beta_fake*omega .le. -20d0)then
+            value = 1.0
+        else
+            value= 1.0/(1.0+exp(Beta_fake*omega))
+   endif
+   return
+end function fermi    
+
+    
 end module fermi_module

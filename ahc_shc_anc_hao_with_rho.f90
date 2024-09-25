@@ -3,7 +3,8 @@
 !rewrite by HaoWang March 7 2023 replace momentum2 by wt
 !*************************************************     
       use mpi     
-      use pauli_comp            
+      use pauli_comp
+      use fermi_module            
       implicit none 
                                                                         
       complex,allocatable:: hops   (:,:,:) 
@@ -88,7 +89,7 @@
 
       complex(kind(1.0d0)) :: pauli_result(4)
       complex(kind(1.0d0)) :: trace_value
-
+      real(kind=8), dimension(:), allocatable :: fermi_values
 
       real :: test_matrix(4, 4)
 
@@ -362,8 +363,8 @@
        do ik= 1+ irank, knv3, isize
          if (irank .eq. 0 .and. mod(ik/isize, 1) .eq. 0) then
           call now(time_end) 
-           write(*, '(a, i18, "/", i18, a, f10.2, "s")') 'ik/knv3', &
-            ik, knv3, '  time left', (knv3-ik)*(time_end-time_start)/isize
+         !   write(*, '(a, i18, "/", i18, a, f10.2, "s")') 'ik/knv3', &
+            ! ik, knv3, '  time left', (knv3-ik)*(time_end-time_start)/isize
             time_start= time_end
          endif
 
@@ -402,12 +403,15 @@
          ! rho(:,:) = rho(:,:) + MATMUL(eigvecs * fermi(eigvals-efermi, Beta_fake), eigvecs_dag)/knv3
          ! 确保 eigvecs 和 fermi_array 的维度匹配
          ! rho(:,:) = rho(:,:) + matmul(eigvecs * diag(fermi_array(eigvals-efermi, Beta_fake)), eigvecs_dag) / knv3
+         
+         fermi_values = fermi_array(eigvals-efermi, Beta_fake)
+         print *, "fermi_values:", fermi_values
          rho(:,:) = rho(:,:) + MATMUL(eigvecs, eigvecs_dag)/knv3
-         write(*,*) "no idea"
+         ! write(*,*) "no idea"
          ! write(*,*) "knv3", knv3
          ! write(*,*) "eigvecs= ", eigvecs 
          ! write(*,*) "eigvals= ", eigvals
-         write(*,*) "eigvals-efermi", eigvals-efermi
+         ! write(*,*) "eigvals-efermi", eigvals-efermi
          ! write(*,*) "efermi= ", efermi
          ! write(*,*) "Beta_fake= ", Beta_fake
          write(*,*) "fermi_array(eigvals-efermi, Beta_fake) is ", fermi_array(eigvals-efermi, Beta_fake)
@@ -610,40 +614,40 @@
                                                                                                                              
 end program ahc_shc_anc_hao
      
-function fermi(omega, Beta_fake) result(value)
-   implicit none
-   real(kind(1.0d0)), intent(in) :: omega
-   real(kind(1.0d0)), intent(in) :: Beta_fake
-   real(kind(1.0d0)) :: value 
-   if (Beta_fake*omega .ge. 20d0) then
-      value = 0.0
-   elseif (Beta_fake*omega .le. -20d0)then
-      value = 1.0
-   else
-      value= 1.0/(1.0+exp(Beta_fake*omega))
-   endif
-   return
-end function fermi    
+! function fermi(omega, Beta_fake) result(value)
+!    implicit none
+!    real(kind(1.0d0)), intent(in) :: omega
+!    real(kind(1.0d0)), intent(in) :: Beta_fake
+!    real(kind(1.0d0)) :: value 
+!    if (Beta_fake*omega .ge. 20d0) then
+!       value = 0.0
+!    elseif (Beta_fake*omega .le. -20d0)then
+!       value = 1.0
+!    else
+!       value= 1.0/(1.0+exp(Beta_fake*omega))
+!    endif
+!    return
+! end function fermi    
 
 
-function fermi_array(omega, Beta_fake) result(value)
-   implicit none
-   real(kind(1.0d0)), intent(in) :: omega(:)  ! omega 改为数组
-   real(kind(1.0d0)), intent(in) :: Beta_fake
-   real(kind(1.0d0)) :: value(size(omega))   ! 返回值也改为数组
-   integer :: i
+! function fermi_array(omega, Beta_fake) result(value)
+!    implicit none
+!    real(kind(1.0d0)), intent(in) :: omega(:)  ! omega 改为数组
+!    real(kind(1.0d0)), intent(in) :: Beta_fake
+!    real(kind(1.0d0)) :: value(size(omega))   ! 返回值也改为数组
+!    integer :: i
 
-   do i = 1, size(omega)
-      if (Beta_fake*omega(i) .ge. 20d0) then
-         value(i) = 0.0
-      elseif (Beta_fake*omega(i) .le. -20d0) then
-         value(i) = 1.0
-      else
-         value(i) = 1.0/(1.0 + exp(Beta_fake*omega(i)))
-      endif
-   end do
-   return
-end function fermi_array
+!    do i = 1, size(omega)
+!       if (Beta_fake*omega(i) .ge. 20d0) then
+!          value(i) = 0.0
+!       elseif (Beta_fake*omega(i) .le. -20d0) then
+!          value(i) = 1.0
+!       else
+!          value(i) = 1.0/(1.0 + exp(Beta_fake*omega(i)))
+!       endif
+!    end do
+!    return
+! end function fermi_array
 
 
 subroutine now(time_now)
