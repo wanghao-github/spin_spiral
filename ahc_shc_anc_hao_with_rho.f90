@@ -550,7 +550,18 @@
    conductivity23_she=sigma_tensor_shc_mpi(1,:)
 
    if(irank.eq.0)then 
-      write(*,*) "rho_mpi = ",rho_mpi 
+      ! write(*,*) "rho_mpi = ",rho_mpi
+
+      write(*,*) '矩阵的实部:'
+      do i = 1, num_wann
+         do j = 1, num_wann
+            ! 使用格式化输出，每个元素占10个字符宽，小数点后3位
+            write(*, '(F10.3)', advance='no') real(rho_mpi(i, j))
+         end do
+      write(*,*)  ! 换行
+      end do
+
+
       call pauli_block_all(rho_mpi,num_wann,pauli_result)
    endif
 
