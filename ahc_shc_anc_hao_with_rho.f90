@@ -405,7 +405,7 @@
          ! rho(:,:) = rho(:,:) + matmul(eigvecs * diag(fermi_array(eigvals-efermi, Beta_fake)), eigvecs_dag) / knv3
          
          fermi_values = fermi_array(eigvals-efermi, Beta_fake)
-         ! print *, "fermi_values:", fermi_values
+         print *, "fermi_values:", fermi_values
 
          do j = 1, num_wann
             do i = 1, num_wann
@@ -413,8 +413,11 @@
             end do
          end do
          temp = matmul(eigvecs_f, eigvecs_dag) / knv3
-         rho = rho + temp
-         ! rho(:,:) = rho(:,:) + MATMUL(eigvecs, eigvecs_dag)/knv3
+
+         print *, "eigvecs_f:", eigvecs_f
+         print *, "temp:", temp
+         ! rho = rho + temp
+         rho(:,:) = rho(:,:) + MATMUL(eigvecs, eigvecs_dag)/knv3
          ! write(*,*) "no idea"
          ! write(*,*) "knv3", knv3
          ! write(*,*) "eigvecs= ", eigvecs 
@@ -422,9 +425,9 @@
          ! write(*,*) "eigvals-efermi", eigvals-efermi
          ! write(*,*) "efermi= ", efermi
          ! write(*,*) "Beta_fake= ", Beta_fake
-         write(*,*) "fermi_array(eigvals-efermi, Beta_fake) is ", fermi_array(eigvals-efermi, Beta_fake)
-         write(*,*) "irank = ", irank
-         write(*,*) "1/knv3 is " , 1/knv3 
+         ! write(*,*) "fermi_array(eigvals-efermi, Beta_fake) is ", fermi_array(eigvals-efermi, Beta_fake)
+         ! write(*,*) "irank = ", irank
+         ! write(*,*) "1/knv3 is " , 1/knv3 
          ! write(*,*) "rho is " , rho 
 
          momentum=0.0 
