@@ -414,8 +414,8 @@
          end do
          temp = matmul(eigvecs_f, eigvecs_dag) / knv3
 
-         print *, "eigvecs_f:", eigvecs_f
-         print *, "temp:", temp
+         write(*,*) "eigvecs_f:", eigvecs_f
+         write(*,*) "temp:", temp
          ! rho = rho + temp
          rho(:,:) = rho(:,:) + MATMUL(eigvecs, eigvecs_dag)/knv3
          ! write(*,*) "no idea"
