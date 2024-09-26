@@ -57,7 +57,7 @@ program anomalous_nernst_effect
     complex,allocatable:: spinmomentum(:,:,:) 
     complex,allocatable:: spinmomentum2(:,:,:) 
     
-    integer,parameter  :: Dp=kind(1.0d0)      
+    ! integer,parameter  :: Dp=kind(1.0d0)      
     complex            :: berry 
 
     integer,allocatable:: sortarray(:),mag_wann_orbs_index1(:),mag_wann_orbs_index2(:),mag_wann_orbs_index3(:),mag_wann_orbs_index8(:)
@@ -86,14 +86,15 @@ program anomalous_nernst_effect
     real,allocatable   :: magnetic(:,:) 
     complex(kind(1.0d0)), allocatable :: Omega_x(:), Omega_y(:), Omega_z(:)
     complex(kind(1.0d0)), allocatable :: Omega_x_t(:), Omega_y_t(:), Omega_z_t(:),spin_sigma_x_t(:),spin_sigma_y_t(:),spin_sigma_z_t(:)
-    real(kind(1.0d0)) :: fermi
+    ! real(kind(1.0d0)) :: fermi
     
     real(kind(1.0d0)) :: K3D_start_cube(3)
     real(kind(1.0d0)) :: K3D_vec1_cube(3)
     real(kind(1.0d0)) :: K3D_vec2_cube(3)
     real(kind(1.0d0)) :: K3D_vec3_cube(3)
-    real(kind(1.0d0)) :: pauli_result(4)
-    real(kind(1.0d0)) :: trace_value
+
+    complex(kind(1.0d0)) :: pauli_result(4)
+    complex(kind(1.0d0)) :: trace_value
     real(kind=8), dimension(:), allocatable :: fermi_values
     !   integer, parameter :: dp = kind(1.0d0)
 
@@ -867,20 +868,20 @@ program anomalous_nernst_effect
 
 end program anomalous_nernst_effect
 
-function fermi(omega, Beta_fake) result(value)
-    implicit none
-    real(kind(1.0d0)), intent(in) :: omega
-    real(kind(1.0d0)), intent(in) :: Beta_fake
-    real(kind(1.0d0)) :: value 
-    if (Beta_fake*omega .ge. 20d0) then
-        value = 0.0
-    elseif (Beta_fake*omega .le. -20d0)then
-        value = 1.0
-    else
-        value= 1.0/(1.0+exp(Beta_fake*omega))
-    endif
-    return
-end function fermi    
+! function fermi(omega, Beta_fake) result(value)
+!     implicit none
+!     real(kind(1.0d0)), intent(in) :: omega
+!     real(kind(1.0d0)), intent(in) :: Beta_fake
+!     real(kind(1.0d0)) :: value 
+!     if (Beta_fake*omega .ge. 20d0) then
+!         value = 0.0
+!     elseif (Beta_fake*omega .le. -20d0)then
+!         value = 1.0
+!     else
+!         value= 1.0/(1.0+exp(Beta_fake*omega))
+!     endif
+!     return
+! end function fermi    
 
 subroutine now(time_now)
 
