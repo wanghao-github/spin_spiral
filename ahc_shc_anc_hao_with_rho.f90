@@ -582,7 +582,7 @@
       end do
 
 
-      call pauli_block_all(rho_mpi,num_wann,pauli_result)
+      call pauli_block_all2(rho_mpi,num_wann,pauli_result)
    endif
 
    if(irank.eq.0)then 
