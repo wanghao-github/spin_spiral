@@ -2,9 +2,14 @@ program anomalous_nernst_effect
 !*************************************************                      
 !rewrite by HaoWang March 7 2023 replace momentum2 by wt
 !modify 2024/8/8 
-!*************************************************                      
-    implicit none                                                      
-    complex,allocatable:: hops   (:,:,:),spin_dir(:,:),spin_dir_mpi(:,:),spin_dir_mpi2(:,:)
+!*************************************************  
+    use mpi     
+    use pauli_comp
+    use fermi_module                       
+    
+    implicit none
+
+    complex,allocatable:: hops(:,:,:),spin_dir(:,:),spin_dir_mpi(:,:),spin_dir_mpi2(:,:)
     complex,allocatable:: rsnabla(:,:,:,:),rspauli_final(:,:,:,:),rspauli_ori(:,:,:,:)
     complex,allocatable:: rspauli(:,:,:,:),rspauli1(:,:,:,:),rspauli2(:,:,:,:),rspauli3(:,:,:,:),rspauli4(:,:,:,:)
     complex,allocatable:: pauli(:,:,:),rspauli5(:,:,:,:),rspauli6(:,:,:,:),rspauli7(:,:,:,:),rspauli8(:,:,:,:)
@@ -25,7 +30,7 @@ program anomalous_nernst_effect
     real,allocatable   :: eigvals(:),eigvals_x(:),eigvals_y(:),eigvals_z(:)
     complex,allocatable:: eigvecs(:,:),eigvecs_dag(:,:),mat_temp(:,:),eigvecs_x(:,:)
     integer            :: info 
-    complex,allocatable:: work(:),eigvecs_y(:,:),eigvecs_z(:,:)
+    complex,allocatable:: work(:),eigvecs_y(:,:),eigvecs_z(:,:),eigvecs_f(:,:),temp(:,:)
     integer            :: lwork 
     integer,allocatable:: iwork(:) 
     real,allocatable   :: rwork(:) 
@@ -89,11 +94,13 @@ program anomalous_nernst_effect
     real(kind(1.0d0)) :: K3D_vec3_cube(3)
     real(kind(1.0d0)) :: pauli_result(4)
     real(kind(1.0d0)) :: trace_value
+    real(kind=8), dimension(:), allocatable :: fermi_values
     !   integer, parameter :: dp = kind(1.0d0)
 
 !!!以上全部都是变量类型声明
-    INCLUDE 'mpif.h' 
-    integer stt(MPI_STATUS_SIZE) 
+    ! INCLUDE 'mpif.h' 
+    ! integer stt(MPI_STATUS_SIZE) 
+    integer, dimension(MPI_STATUS_SIZE) :: stt  
                                                                       
     CALL MPI_INIT(ierr)                                                            
     CALL MPI_COMM_RANK (MPI_COMM_WORLD,irank,ierr) 
@@ -159,14 +166,14 @@ program anomalous_nernst_effect
         read(300,*)mag_wann_orbs_index7
         read(300,*)mag_wann_orbs_index8
         close(300) 
-        write(*,*) mag_wann_orbs_index1
-        write(*,*) mag_wann_orbs_index2
-        write(*,*) mag_wann_orbs_index3
-        write(*,*) mag_wann_orbs_index4
-        write(*,*) mag_wann_orbs_index5
-        write(*,*) mag_wann_orbs_index6
-        write(*,*) mag_wann_orbs_index7
-        write(*,*) mag_wann_orbs_index8
+        ! write(*,*) mag_wann_orbs_index1
+        ! write(*,*) mag_wann_orbs_index2
+        ! write(*,*) mag_wann_orbs_index3
+        ! write(*,*) mag_wann_orbs_index4
+        ! write(*,*) mag_wann_orbs_index5
+        ! write(*,*) mag_wann_orbs_index6
+        ! write(*,*) mag_wann_orbs_index7
+        ! write(*,*) mag_wann_orbs_index8
     endif 
 
 !!! 读入所有输入的轨道
@@ -654,7 +661,9 @@ program anomalous_nernst_effect
     allocate(eigvecs_dag(num_wann,num_wann))
     allocate(eigvecs_x(num_wann,num_wann))
     allocate(eigvecs_y(num_wann,num_wann))
-    allocate(eigvecs_z(num_wann,num_wann))  
+    allocate(eigvecs_z(num_wann,num_wann))
+    allocate(eigvecs_f(num_wann,num_wann)) 
+    allocate(temp(num_wann,num_wann))  
     allocate(mat_temp(num_wann,num_wann))
     allocate(spin_sigma_temp(num_wann,num_wann))    
     allocate(spin_sigma_x_comp(num_wann,num_wann))
@@ -709,18 +718,35 @@ program anomalous_nernst_effect
  
         call zheevx('V','A','U',num_wann,ham,num_wann,vl,vu,1,num_wann,abstol,ne,&
                     eigvals,eigvecs,num_wann,work,lwork,rwork,iwork,ifail,info)                        
-        if(info.ne.0)stop 'zheevx'                              
+        if(info.ne.0)stop 'zheevx'      
 
         eigvecs_dag=conjg(transpose(eigvecs))
-        rho(:,:) = rho(:,:) +MATMUL(eigvecs * fermi(eigvals-efermi, Beta_fake), eigvecs_dag)*(1/knv3)
+
+         fermi_values = fermi_array(eigvals-efermi, Beta_fake)
+        !  print *, "fermi_values:", fermi_values
+        !  print *, "here no problem0"
+         do j = 1, num_wann
+            do i = 1, num_wann
+               eigvecs_f(i, j) = eigvecs(i, j) * fermi_values(j)
+            end do
+         end do
+
+        !  print *, "here no problem1"
+         temp = matmul(eigvecs_f, eigvecs_dag) / knv3
+        !  print *, "here no problem2"
+        !  write(*,*) "eigvecs_f:", eigvecs_f
+        !  write(*,*) "temp:", temp
+         rho = rho + temp
+        
+        ! rho(:,:) = rho(:,:) +MATMUL(eigvecs * fermi(eigvals-efermi, Beta_fake), eigvecs_dag)*(1/knv3)
         ! rho(:,:) = rho(:,:) +MATMUL(eigvecs * fermi(eigvals-efermi, Beta_fake), eigvecs_dag)*(1/knv3)
         ! write(*,*) "knv3", knv3
         ! write(*,*) "eigvecs= ", eigvecs 
         ! write(*,*) "eigvals= ", eigvals
         ! write(*,*) "efermi= ", efermi
         ! write(*,*) "Beta_fake= ", Beta_fake
-        write(*,*) "irank = ",irank, "rho is " , rho 
-        write(*,*) "fermi(eigvals-efermi, Beta_fake) is ", fermi(eigvals-efermi, Beta_fake)
+        ! write(*,*) "irank = ",irank, "rho is " , rho 
+        ! write(*,*) "fermi(eigvals-efermi, Beta_fake) is ", fermi(eigvals-efermi, Beta_fake)
         
         spin_sigma_x_comp = 0.0d0
         spin_sigma_y_comp = 0.0d0
@@ -800,10 +826,20 @@ program anomalous_nernst_effect
     conductivity13_ahe=sigma_tensor_ahc_mpi(2,:)   
     conductivity23_ahe=sigma_tensor_ahc_mpi(1,:)
 
-    if(irank.eq.0)then 
-        write(*,*) "rho_mpi = ",rho_mpi 
-        call pauli_block_all(rho_mpi,num_wann,pauli_result)
-    endif
+
+   if(irank.eq.0)then 
+      ! write(*,*) "rho_mpi = ",rho_mpi
+
+    !   write(*,*) '矩阵的实部:'
+    !   do i = 1, num_wann
+    !      do j = 1, num_wann
+    !         ! 使用格式化输出，每个元素占10个字符宽，小数点后3位
+    !         ! write(*, '(F10.3)', advance='no') real(rho_mpi(i, j))
+    !      end do
+    !   write(*,*)  ! 换行
+    !   end do
+      call pauli_block_all2(rho_mpi,num_wann,pauli_result)
+   endif
 
     if(irank.eq.0)then 
         open(123,file='output_ahe_condquant',recl=10000) 
@@ -879,50 +915,50 @@ subroutine mat_mul(nmatdim,A,B,C)
     return
 end subroutine mat_mul
 
-subroutine pauli_block_all(M,size,pauli_result)
+! subroutine pauli_block_all(M,size,pauli_result)
     
-    implicit none
-    integer,  intent(in)  :: size
-    integer :: nwann_2
-    real(kind(1.0d0)), intent(in)  :: M(size,size)
-    real(kind(1.0d0)), intent(out) :: pauli_result(4)
-    real(kind(1.0d0)) :: MI(size/2,size/2)
-    real(kind(1.0d0)) :: Mx(size/2,size/2)
-    real(kind(1.0d0)) :: My(size/2,size/2)
-    real(kind(1.0d0)) :: Mz(size/2,size/2)
-    real(kind(1.0d0)) :: trace_value
-    nwann_2 = size/2
-    MI = 0.0
-    Mx = 0.0
-    My = 0.0
-    Mz = 0.0
+!     implicit none
+!     integer,  intent(in)  :: size
+!     integer :: nwann_2
+!     real(kind(1.0d0)), intent(in)  :: M(size,size)
+!     real(kind(1.0d0)), intent(out) :: pauli_result(4)
+!     real(kind(1.0d0)) :: MI(size/2,size/2)
+!     real(kind(1.0d0)) :: Mx(size/2,size/2)
+!     real(kind(1.0d0)) :: My(size/2,size/2)
+!     real(kind(1.0d0)) :: Mz(size/2,size/2)
+!     real(kind(1.0d0)) :: trace_value
+!     nwann_2 = size/2
+!     MI = 0.0
+!     Mx = 0.0
+!     My = 0.0
+!     Mz = 0.0
 
-    MI = (M(1:nwann_2:1, 1:nwann_2:1) + M(nwann_2+1:2*nwann_2:1, nwann_2+1:2*nwann_2:1)) / 2.0
-    Mx = (M(nwann_2+1:2*nwann_2:1, 1:nwann_2:1) + M(1:nwann_2:1, nwann_2+1:2*nwann_2:1)) / 2.0
-    My = (M(nwann_2+1:2*nwann_2:1, 1:nwann_2:1) - M(1:nwann_2:1, nwann_2+1:2*nwann_2:1)) * 0.5 * (0.0, 1.0)
-    Mz = (M(1:nwann_2:1, 1:nwann_2:1) - M(nwann_2+1:2*nwann_2:1, nwann_2+1:2*nwann_2:1)) / 2.0
+!     MI = (M(1:nwann_2:1, 1:nwann_2:1) + M(nwann_2+1:2*nwann_2:1, nwann_2+1:2*nwann_2:1)) / 2.0
+!     Mx = (M(nwann_2+1:2*nwann_2:1, 1:nwann_2:1) + M(1:nwann_2:1, nwann_2+1:2*nwann_2:1)) / 2.0
+!     My = (M(nwann_2+1:2*nwann_2:1, 1:nwann_2:1) - M(1:nwann_2:1, nwann_2+1:2*nwann_2:1)) * 0.5 * (0.0, 1.0)
+!     Mz = (M(1:nwann_2:1, 1:nwann_2:1) - M(nwann_2+1:2*nwann_2:1, nwann_2+1:2*nwann_2:1)) / 2.0
 
-   call trace(MI, trace_value)
-   pauli_result(1) = trace_value
-   call trace(Mx, trace_value)
-   pauli_result(2) = trace_value
-   call trace(My, trace_value)
-   pauli_result(3) = trace_value
-   call trace(Mz, trace_value)
-   pauli_result(4) = trace_value
+!    call trace(MI, trace_value)
+!    pauli_result(1) = trace_value
+!    call trace(Mx, trace_value)
+!    pauli_result(2) = trace_value
+!    call trace(My, trace_value)
+!    pauli_result(3) = trace_value
+!    call trace(Mz, trace_value)
+!    pauli_result(4) = trace_value
 
-end subroutine pauli_block_all
+! end subroutine pauli_block_all
 
-subroutine trace(M, trace_value)
-      implicit none
-      real(kind(1.0d0)), intent(in) :: M(:,:)
-      real(kind(1.0d0)), intent(out) :: trace_value
-      integer :: i, n
+! subroutine trace(M, trace_value)
+!       implicit none
+!       real(kind(1.0d0)), intent(in) :: M(:,:)
+!       real(kind(1.0d0)), intent(out) :: trace_value
+!       integer :: i, n
 
-      n = size(M, 1)
-      trace_value = 0.0
+!       n = size(M, 1)
+!       trace_value = 0.0
 
-     do i = 1, n
-         trace_value = trace_value + M(i, i)
-     end do
-end subroutine trace
+!      do i = 1, n
+!          trace_value = trace_value + M(i, i)
+!      end do
+! end subroutine trace
