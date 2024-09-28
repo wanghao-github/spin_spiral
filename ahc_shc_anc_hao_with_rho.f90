@@ -126,8 +126,8 @@
          read(300,*)mag_wann_num2
          allocate(mag_wann_orbs_index1(mag_wann_num1))
          allocate(mag_wann_orbs_index2(mag_wann_num2))
-         read(300,*)mag_wann_orbs_index1(mag_wann_num1)
-         read(300,*)mag_wann_orbs_index2(mag_wann_num2)
+         read(300,*)mag_wann_orbs_index1
+         read(300,*)mag_wann_orbs_index2
          write(*,*) mag_wann_orbs_index1
          write(*,*) mag_wann_orbs_index2
          close(300) 
