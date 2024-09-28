@@ -59,7 +59,7 @@
       complex            :: berry 
                                                                         
       integer,allocatable:: sortarray(:),mag_wann_orbs_index(:)
-      integer            :: n1,n2,n3,n4,dir,mag_wann_num
+      integer            :: n1,n2,n3,n4,dir,mag_wann_num1,mag_wann_num2
       real,allocatable   :: occupation(:),occupation2(:) 
       integer,allocatable   :: nrpts(:) 
       real               :: occupation_number 
@@ -122,9 +122,14 @@
          read(300,*)mag_strength                
          read(300,*)mag_theta                        
          read(300,*)mag_phi                          
-         read(300,*)mag_wann_num
-         allocate(mag_wann_orbs_index(mag_wann_num))
-         read(300,*)mag_wann_orbs_index(mag_wann_num)
+         read(300,*)mag_wann_num1
+         read(300,*)mag_wann_num2
+         allocate(mag_wann_orbs_index1(mag_wann_num))
+         allocate(mag_wann_orbs_index2(mag_wann_num))
+         read(300,*)mag_wann_orbs_index1(mag_wann_num)
+         read(300,*)mag_wann_orbs_index1(mag_wann_num)
+         write(*,*) mag_wann_orbs_index1
+         write(*,*) mag_wann_orbs_index2
          close(300) 
          !print*, mag_wann_orbs_index
       endif 
@@ -153,8 +158,10 @@
       call mpi_bcast(mag_strength,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
       call mpi_bcast(mag_theta,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
       call mpi_bcast(mag_phi,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
-      !call mpi_bcast(mag_wann_num,1,MPI_INTEGER, 0,mpi_comm_world,ierr)
-      !call mpi_bcast(mag_wann_orbs_index,mag_wann_num,MPI_INTEGER,0,mpi_comm_world,ierr)
+      call mpi_bcast(mag_wann_num1,1,MPI_INTEGER, 0,mpi_comm_world,ierr)
+      call mpi_bcast(mag_wann_orbs_index1,mag_wann_num1,MPI_INTEGER,0,mpi_comm_world,ierr)
+      call mpi_bcast(mag_wann_num2,1,MPI_INTEGER, 0,mpi_comm_world,ierr)
+      call mpi_bcast(mag_wann_orbs_index2,mag_wann_num2,MPI_INTEGER,0,mpi_comm_world,ierr)
       call mpi_bcast(temperature,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
       call mpi_bcast(kbT,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
 
