@@ -58,7 +58,7 @@
       ! integer,parameter :: Dp=kind(1.0d0)      
       complex            :: berry 
                                                                         
-      integer,allocatable:: sortarray(:),mag_wann_orbs_index(:)
+      integer,allocatable:: sortarray(:),mag_wann_orbs_index1(:),mag_wann_orbs_index2(:)
       integer            :: n1,n2,n3,n4,dir,mag_wann_num1,mag_wann_num2
       real,allocatable   :: occupation(:),occupation2(:) 
       integer,allocatable   :: nrpts(:) 
@@ -127,7 +127,7 @@
          allocate(mag_wann_orbs_index1(mag_wann_num1))
          allocate(mag_wann_orbs_index2(mag_wann_num2))
          read(300,*)mag_wann_orbs_index1(mag_wann_num1)
-         read(300,*)mag_wann_orbs_index1(mag_wann_num2)
+         read(300,*)mag_wann_orbs_index2(mag_wann_num2)
          write(*,*) mag_wann_orbs_index1
          write(*,*) mag_wann_orbs_index2
          close(300) 
