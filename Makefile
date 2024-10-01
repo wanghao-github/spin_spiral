@@ -10,11 +10,11 @@ FFLAGS = -CB -r8 -mkl
 TARGET = ahc_shc_anc_hao_with_rho.x
 
 # 源文件
-SRC_MODULE = pauli.f90 fermi.f90
+SRC_MODULE = pauli.f90 fermi.f90 slice_matrix.f90
 SRC_MAIN = ahc_shc_anc_hao_with_rho.f90
 
 # 生成的对象文件
-OBJ_MODULE = pauli.o fermi.o
+OBJ_MODULE = pauli.o fermi.o slice_matrix.o
 OBJ_MAIN = ahc_shc_anc_hao_with_rho.o
 
 # 默认目标
