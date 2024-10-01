@@ -27,16 +27,18 @@ contains
         Mz = (M(1:nwann_2, 1:nwann_2) - M(nwann_2+1:2*nwann_2, nwann_2+1:2*nwann_2)) / 2.0_dp
 
         call trace(MI, trace_value)
-        pauli_result(1) = trace_value
+        pauli_result(1) = trace_value * 2.0_dp
 
         call trace(Mx, trace_value)
-        pauli_result(2) = trace_value
+        pauli_result(2) = trace_value * 2.0_dp
 
         call trace(My, trace_value)
-        pauli_result(3) = trace_value
+        pauli_result(3) = trace_value * 2.0_dp
 
         call trace(Mz, trace_value)
-        pauli_result(4) = trace_value
+
+        pauli_result(4) = trace_value * 2.0_dp
+    
     end subroutine pauli_block_all
 
 subroutine pauli_block_all2(M, size, pauli_result)
@@ -62,16 +64,16 @@ subroutine pauli_block_all2(M, size, pauli_result)
         Mz = (M(1:size:2, 1:size:2) - M(2:size:2, 2:size:2)) / 2.0_dp
 
         call trace(MI, trace_value)
-        pauli_result(1) = trace_value
+        pauli_result(1) = trace_value * 2.0_dp
 
         call trace(Mx, trace_value)
-        pauli_result(2) = trace_value
+        pauli_result(2) = trace_value * 2.0_dp
 
         call trace(My, trace_value)
-        pauli_result(3) = trace_value
+        pauli_result(3) = trace_value * 2.0_dp
 
         call trace(Mz, trace_value)
-        pauli_result(4) = trace_value
+        pauli_result(4) = trace_value * 2.0_dp
     end subroutine pauli_block_all2
 
 
