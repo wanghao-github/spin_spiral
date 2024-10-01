@@ -4,7 +4,9 @@
 !*************************************************     
       use mpi     
       use pauli_comp
-      use fermi_module            
+      use fermi_module       
+      use slice_matrix
+           
       implicit none 
                                                                         
       complex,allocatable:: hops   (:,:,:) 
