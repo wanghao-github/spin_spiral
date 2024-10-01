@@ -595,7 +595,7 @@
 
       call pauli_block_all(rho_mpi,num_wann,pauli_result)
 
-      call slice_matrix(rho_mpi, mag_wann_num1,mag_wann_orbs_index1, rho_on_atom)
+      call get_atom_matrix_rho(rho_mpi, mag_wann_num1,mag_wann_orbs_index1, rho_on_atom)
 
       call pauli_block_all(rho_on_atom,mag_wann_num1,pauli_result_on_Mn1)
 
