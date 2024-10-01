@@ -14,6 +14,8 @@
       complex,allocatable:: paulifft(:,:,:) 
       complex,allocatable:: paulifft2(:,:,:) 
       complex,allocatable:: rho(:,:),rho_mpi(:,:)
+
+      complex,allocatable:: rho_on_atom(:,:)
       real               :: rdum,idum 
       integer            :: ix,iy,iz,band1,band2,h,num_wann,m,n
       integer            :: ik1,ik2,ik3 
@@ -88,6 +90,7 @@
       real(kind(1.0d0)) :: K3D_vec3_cube(3)
 
       complex(kind(1.0d0)) :: pauli_result(4)
+      complex(kind(1.0d0)) :: pauli_result_on_Mn1(4)
       complex(kind(1.0d0)) :: trace_value
       real(kind=8), dimension(:), allocatable :: fermi_values
 
@@ -312,7 +315,8 @@
       allocate(Omega_x_t_shc(num_wann), Omega_y_t_shc(num_wann), Omega_z_t_shc(num_wann))
 
       allocate(rho(num_wann,num_wann))
-      allocate(rho_mpi(num_wann,num_wann)) 
+      allocate(rho_mpi(num_wann,num_wann))
+      allocate(rho_on_atom(mag_wann_num1,mag_wann_num1)) 
 
 
       rho = 0.0
@@ -589,7 +593,12 @@
       end do
 
 
-      call pauli_block_all2(rho_mpi,num_wann,pauli_result)
+      call pauli_block_all(rho_mpi,num_wann,pauli_result)
+
+      call slice_matrix(rho_mpi, mag_wann_num1,mag_wann_orbs_index1, rho_on_atom)
+
+      call pauli_block_all(rho_on_atom,mag_wann_num1,pauli_result_on_Mn1)
+
    endif
 
    if(irank.eq.0)then 
@@ -621,14 +630,21 @@
             enddo 
          close(321)  
 
-         open(458,file='charge_on_each_atom',recl=10000) 
+         open(458,file='total_charge',recl=10000) 
          do m=1,4
              write(458,*)"m= ", m
              write(458,*)"charge=",pauli_result(m)
              write(458,*)"************************************" 
          enddo
-         close(458) 
+         close(458)
 
+         open(459,file='charge_on_Mn1',recl=10000) 
+         do m=1,4
+             write(459,*)"m= ", m
+             write(459,*)"charge=",pauli_result_on_Mn1(m)
+             write(459,*)"************************************" 
+         enddo
+         close(459) 
 
       endif 
       call mpi_barrier(mpi_comm_world,ierr) 

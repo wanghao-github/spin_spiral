@@ -6,6 +6,8 @@ module pauli_comp
 contains
 
     subroutine pauli_block_all(M, size, pauli_result)
+
+    !!! VASP wannier format up up dn dn
         implicit none
         integer, intent(in) :: size
         complex(kind(1.0d0)), intent(in) :: M(size, size)
@@ -38,6 +40,9 @@ contains
     end subroutine pauli_block_all
 
 subroutine pauli_block_all2(M, size, pauli_result)
+
+
+        !!! QE wannier format up dn up dn
         implicit none
         integer, intent(in) :: size
         complex(kind(1.0d0)), intent(in) :: M(size, size)
