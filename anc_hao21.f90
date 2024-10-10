@@ -5,7 +5,8 @@ program anomalous_nernst_effect
 !*************************************************  
     use mpi     
     use pauli_comp
-    use fermi_module                       
+    use fermi_module  
+    use slice_matrix                     
     
     implicit none
 
@@ -94,6 +95,7 @@ program anomalous_nernst_effect
     real(kind(1.0d0)) :: K3D_vec3_cube(3)
 
     complex(kind(1.0d0)) :: pauli_result(4)
+    complex(kind(1.0d0)) :: pauli_result_on_Mn1(4)
     complex(kind(1.0d0)) :: trace_value
     real(kind=8), dimension(:), allocatable :: fermi_values
     !   integer, parameter :: dp = kind(1.0d0)
@@ -839,7 +841,14 @@ program anomalous_nernst_effect
     !      end do
     !   write(*,*)  ! 换行
     !   end do
-      call pauli_block_all2(rho_mpi,num_wann,pauli_result)
+      call pauli_block_all(rho_mpi,num_wann,pauli_result)
+
+      call get_atom_matrix_rho(rho_mpi, mag_wann_num1,mag_wann_orbs_index1, rho_on_atom)
+
+      call pauli_block_all(rho_on_atom,mag_wann_num1,pauli_result_on_Mn1)
+
+        ! call get_atom_matrix_rho(rho_mpi, mag_wann_num1,mag_wann_orbs_index1, rho_on_atom)
+        ! call pauli_block_all2(rho_mpi,num_wann,pauli_result)
    endif
 
     if(irank.eq.0)then 
@@ -861,6 +870,63 @@ program anomalous_nernst_effect
             write(458,*)"************************************" 
         enddo
         close(458)
+
+
+        open(459,file='charge_on_Mn1',recl=10000) 
+        do m=1,4
+            write(459,*)"m= ", m
+            write(459,*)"charge=",pauli_result_on_Mn1(m)
+            write(459,*)"************************************" 
+        enddo
+        close(459) 
+
+        open(460,file='charge_on_Mn2',recl=10000) 
+        do m=1,4
+            write(460,*)"m= ", m
+            write(460,*)"charge=",pauli_result_on_Mn2(m)
+            write(460,*)"************************************" 
+        enddo
+        close(460) 
+
+        open(461,file='charge_on_Mn3',recl=10000) 
+        do m=1,4
+            write(461,*)"m= ", m
+            write(461,*)"charge=",pauli_result_on_Mn3(m)
+            write(461,*)"************************************" 
+        enddo
+        close(461) 
+
+        open(462,file='charge_on_Mn4',recl=10000) 
+        do m=1,4
+            write(462,*)"m= ", m
+            write(462,*)"charge=",pauli_result_on_Mn4(m)
+            write(462,*)"************************************" 
+        enddo
+        close(462) 
+
+        open(463,file='charge_on_Mn5',recl=10000) 
+        do m=1,4
+            write(463,*)"m= ", m
+            write(463,*)"charge=",pauli_result_on_Mn5(m)
+            write(463,*)"************************************" 
+        enddo
+        close(463) 
+
+        open(464,file='charge_on_Mn6',recl=10000) 
+        do m=1,4
+            write(464,*)"m= ", m
+            write(464,*)"charge=",pauli_result_on_Mn6(m)
+            write(464,*)"************************************" 
+        enddo
+        close(464) 
+
+        open(465,file='charge_on_Mn6',recl=10000) 
+        do m=1,4
+            write(465,*)"m= ", m
+            write(465,*)"charge=",pauli_result_on_Mn6(m)
+            write(465,*)"************************************" 
+        enddo
+        close(465) 
 
     endif 
     call mpi_barrier(mpi_comm_world,ierr) 
