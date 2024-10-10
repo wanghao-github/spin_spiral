@@ -871,7 +871,6 @@ program anomalous_nernst_effect
         enddo
         close(458)
 
-
         open(459,file='charge_on_Mn1',recl=10000) 
         do m=1,4
             write(459,*)"m= ", m
@@ -920,13 +919,21 @@ program anomalous_nernst_effect
         enddo
         close(464) 
 
-        open(465,file='charge_on_Mn6',recl=10000) 
+        open(465,file='charge_on_Mn7',recl=10000) 
         do m=1,4
             write(465,*)"m= ", m
-            write(465,*)"charge=",pauli_result_on_Mn6(m)
+            write(465,*)"charge=",pauli_result_on_Mn7(m)
             write(465,*)"************************************" 
         enddo
         close(465) 
+
+        open(466,file='charge_on_Mn8',recl=10000) 
+        do m=1,4
+            write(466,*)"m= ", m
+            write(466,*)"charge=",pauli_result_on_Mn8(m)
+            write(466,*)"************************************" 
+        enddo
+        close(466) 
 
     endif 
     call mpi_barrier(mpi_comm_world,ierr) 
