@@ -95,7 +95,8 @@ program anomalous_nernst_effect
     real(kind(1.0d0)) :: K3D_vec3_cube(3)
 
     complex(kind(1.0d0)) :: pauli_result(4)
-    complex(kind(1.0d0)) :: pauli_result_on_Mn1(4)
+    complex(kind(1.0d0)) :: pauli_result_on_Mn1(4),pauli_result_on_Mn2(4),pauli_result_on_Mn3(4),pauli_result_on_Mn4(4)
+    complex(kind(1.0d0)) :: pauli_result_on_Mn5(4),pauli_result_on_Mn6(4),pauli_result_on_Mn7(4),pauli_result_on_Mn8(4)
     complex(kind(1.0d0)) :: trace_value
     real(kind=8), dimension(:), allocatable :: fermi_values
     !   integer, parameter :: dp = kind(1.0d0)
@@ -846,6 +847,13 @@ program anomalous_nernst_effect
       call get_atom_matrix_rho(rho_mpi, mag_wann_num1,mag_wann_orbs_index1, rho_on_atom)
 
       call pauli_block_all(rho_on_atom,mag_wann_num1,pauli_result_on_Mn1)
+      call pauli_block_all(rho_on_atom,mag_wann_num1,pauli_result_on_Mn2)
+      call pauli_block_all(rho_on_atom,mag_wann_num1,pauli_result_on_Mn3)
+      call pauli_block_all(rho_on_atom,mag_wann_num1,pauli_result_on_Mn4)
+      call pauli_block_all(rho_on_atom,mag_wann_num1,pauli_result_on_Mn5)
+      call pauli_block_all(rho_on_atom,mag_wann_num1,pauli_result_on_Mn6)
+      call pauli_block_all(rho_on_atom,mag_wann_num1,pauli_result_on_Mn7)
+      call pauli_block_all(rho_on_atom,mag_wann_num1,pauli_result_on_Mn8)
 
         ! call get_atom_matrix_rho(rho_mpi, mag_wann_num1,mag_wann_orbs_index1, rho_on_atom)
         ! call pauli_block_all2(rho_mpi,num_wann,pauli_result)
