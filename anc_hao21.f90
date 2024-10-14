@@ -97,7 +97,8 @@ program anomalous_nernst_effect
     complex(kind(1.0d0)) :: pauli_result(4)
     complex(kind(1.0d0)) :: pauli_result_on_Mn1(4),pauli_result_on_Mn2(4),pauli_result_on_Mn3(4),pauli_result_on_Mn4(4)
     complex(kind(1.0d0)) :: pauli_result_on_Mn5(4),pauli_result_on_Mn6(4),pauli_result_on_Mn7(4),pauli_result_on_Mn8(4)
-    complex,allocatable  :: rho_on_atom(:,:)
+    complex,allocatable  :: rho_on_atom1(:,:),rho_on_atom2(:,:),rho_on_atom3(:,:),rho_on_atom4(:,:)
+    complex,allocatable  :: rho_on_atom5(:,:),rho_on_atom6(:,:),rho_on_atom7(:,:),rho_on_atom8(:,:)
     complex(kind(1.0d0)) :: trace_value
     real(kind=8), dimension(:), allocatable :: fermi_values
     !   integer, parameter :: dp = kind(1.0d0)
@@ -621,8 +622,15 @@ program anomalous_nernst_effect
 
     allocate(rho(num_wann,num_wann))
     allocate(rho_mpi(num_wann,num_wann)) 
-    allocate(rho_on_atom(mag_wann_num1,mag_wann_num1))
 
+    allocate(rho_on_atom1(mag_wann_num1,mag_wann_num1))
+    allocate(rho_on_atom2(mag_wann_num2,mag_wann_num2))
+    allocate(rho_on_atom3(mag_wann_num3,mag_wann_num3))
+    allocate(rho_on_atom4(mag_wann_num4,mag_wann_num4))
+    allocate(rho_on_atom5(mag_wann_num5,mag_wann_num5))
+    allocate(rho_on_atom6(mag_wann_num6,mag_wann_num6))
+    allocate(rho_on_atom7(mag_wann_num7,mag_wann_num7))
+    allocate(rho_on_atom8(mag_wann_num8,mag_wann_num8))
 
     allocate(spin_dir(3,num_wann))
     allocate(spin_dir_mpi(3,num_wann))
@@ -847,7 +855,14 @@ program anomalous_nernst_effect
     !   end do
       call pauli_block_all(rho_mpi,num_wann,pauli_result)
 
-      call get_atom_matrix_rho(rho_mpi, mag_wann_num1,mag_wann_orbs_index1, rho_on_atom)
+      call get_atom_matrix_rho(rho_mpi, mag_wann_num1,mag_wann_orbs_index1, rho_on_atom1)
+      call get_atom_matrix_rho(rho_mpi, mag_wann_num2,mag_wann_orbs_index2, rho_on_atom2)
+      call get_atom_matrix_rho(rho_mpi, mag_wann_num3,mag_wann_orbs_index3, rho_on_atom3)
+      call get_atom_matrix_rho(rho_mpi, mag_wann_num4,mag_wann_orbs_index4, rho_on_atom4)
+      call get_atom_matrix_rho(rho_mpi, mag_wann_num5,mag_wann_orbs_index5, rho_on_atom5)
+      call get_atom_matrix_rho(rho_mpi, mag_wann_num6,mag_wann_orbs_index6, rho_on_atom6)
+      call get_atom_matrix_rho(rho_mpi, mag_wann_num7,mag_wann_orbs_index7, rho_on_atom7)
+      call get_atom_matrix_rho(rho_mpi, mag_wann_num8,mag_wann_orbs_index8, rho_on_atom8)
 
       call pauli_block_all(rho_on_atom,mag_wann_num1,pauli_result_on_Mn1)
       call pauli_block_all(rho_on_atom,mag_wann_num2,pauli_result_on_Mn2)
