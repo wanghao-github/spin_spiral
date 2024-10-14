@@ -397,57 +397,110 @@ program anomalous_nernst_effect
         !write(*,*) "mag_wann_orbs_index7", mag_wann_orbs_index7
         !write(*,*) "mag_wann_orbs_index8", mag_wann_orbs_index8
 
-        do m = 1,num_wann/2
+        ! do m = 1,num_wann/2
+        
+        ! if (ANY(mag_wann_orbs_index1 == m))then
+        !     write(*,*) "satisified 1", m
+        !     select_atom1(m,m) = 1
+        !     select_atom1(m+num_wann/2,m+num_wann/2) = 1 
+        ! endif
+
+        ! if (ANY(mag_wann_orbs_index2 == m))then
+        !     write(*,*) "satisified 2", m
+        !     select_atom2(m,m) = 1
+        !     select_atom2(m+num_wann/2,m+num_wann/2) = 1
+        ! endif
+
+        ! if (ANY(mag_wann_orbs_index3 == m))then
+        !     write(*,*) "satisified 3", m
+        !     select_atom3(m,m) = 1
+        !     select_atom3(m+num_wann/2,m+num_wann/2) = 1
+        ! endif
+
+        ! if (ANY(mag_wann_orbs_index4 == m))then
+        !     write(*,*) "satisified 4", m
+        !     select_atom4(m,m) = 1
+        !     select_atom4(m+num_wann/2,m+num_wann/2) = 1
+        ! endif
+
+        ! if (ANY(mag_wann_orbs_index5 == m))then
+        !     write(*,*) "satisified 5", m
+        !     select_atom5(m,m) = 1
+        !     select_atom5(m+num_wann/2,m+num_wann/2) = 1
+        ! endif
+
+        ! if (ANY(mag_wann_orbs_index6 == m))then
+        !     write(*,*) "satisified 6", m
+        !     select_atom6(m,m) = 1
+        !     select_atom6(m+num_wann/2,m+num_wann/2) = 1
+        ! endif
+
+        ! if (ANY(mag_wann_orbs_index7 == m))then
+        !     write(*,*) "satisified 7", m
+        !     select_atom7(m,m) = 1
+        !     select_atom7(m+num_wann/2,m+num_wann/2) = 1
+        ! endif
+
+        ! if (ANY(mag_wann_orbs_index8 == m))then
+        !     write(*,*) "satisified 8", m
+        !     select_atom8(m,m) = 1
+        !     select_atom8(m+num_wann/2,m+num_wann/2) = 1
+        ! endif
+
+        ! enddo
+
+        do m = 1,num_wann
         
         if (ANY(mag_wann_orbs_index1 == m))then
             write(*,*) "satisified 1", m
             select_atom1(m,m) = 1
-            select_atom1(m+num_wann/2,m+num_wann/2) = 1 
+            ! select_atom1(m+num_wann/2,m+num_wann/2) = 1 
         endif
 
         if (ANY(mag_wann_orbs_index2 == m))then
             write(*,*) "satisified 2", m
             select_atom2(m,m) = 1
-            select_atom2(m+num_wann/2,m+num_wann/2) = 1
+            ! select_atom2(m+num_wann/2,m+num_wann/2) = 1
         endif
 
         if (ANY(mag_wann_orbs_index3 == m))then
             write(*,*) "satisified 3", m
             select_atom3(m,m) = 1
-            select_atom3(m+num_wann/2,m+num_wann/2) = 1
+            ! select_atom3(m+num_wann/2,m+num_wann/2) = 1
         endif
 
         if (ANY(mag_wann_orbs_index4 == m))then
             write(*,*) "satisified 4", m
             select_atom4(m,m) = 1
-            select_atom4(m+num_wann/2,m+num_wann/2) = 1
+            ! select_atom4(m+num_wann/2,m+num_wann/2) = 1
         endif
 
         if (ANY(mag_wann_orbs_index5 == m))then
             write(*,*) "satisified 5", m
             select_atom5(m,m) = 1
-            select_atom5(m+num_wann/2,m+num_wann/2) = 1
+            ! select_atom5(m+num_wann/2,m+num_wann/2) = 1
         endif
 
         if (ANY(mag_wann_orbs_index6 == m))then
             write(*,*) "satisified 6", m
             select_atom6(m,m) = 1
-            select_atom6(m+num_wann/2,m+num_wann/2) = 1
+            ! select_atom6(m+num_wann/2,m+num_wann/2) = 1
         endif
 
         if (ANY(mag_wann_orbs_index7 == m))then
             write(*,*) "satisified 7", m
             select_atom7(m,m) = 1
-            select_atom7(m+num_wann/2,m+num_wann/2) = 1
+            ! select_atom7(m+num_wann/2,m+num_wann/2) = 1
         endif
 
         if (ANY(mag_wann_orbs_index8 == m))then
             write(*,*) "satisified 8", m
             select_atom8(m,m) = 1
-            select_atom8(m+num_wann/2,m+num_wann/2) = 1
+            ! select_atom8(m+num_wann/2,m+num_wann/2) = 1
         endif
 
         enddo
+
 
         ! write(*,*) mag_field_x1,mag_field_y1,mag_field_z1,mag_field_x2,mag_field_y2,mag_field_z2
         ! write(*,*) mag_field_x3,mag_field_y3,mag_field_z3,mag_field_x4,mag_field_y4,mag_field_z4
@@ -473,45 +526,45 @@ program anomalous_nernst_effect
 
                 enddo
                 !!! 下面是传统的直接把rspauli加到hop上的方法
-                ! hops(:,:,ii) = hops(:,:,ii) + mag_field_x1 * rspauli1(:,:,1,ii)/2.0d0 + &
-                ! mag_field_y1 * rspauli1(:,:,2,ii)/2.0d0 + mag_field_z1 * rspauli1(:,:,3,ii)/2.0d0 + &
-                ! mag_field_x2 * rspauli2(:,:,1,ii)/2.0d0 + mag_field_y2 * rspauli2(:,:,2,ii)/2.0d0 + & 
-                ! mag_field_z2 * rspauli2(:,:,3,ii)/2.0d0 + mag_field_x3 * rspauli3(:,:,1,ii)/2.0d0 + &
-                ! mag_field_y3 * rspauli3(:,:,2,ii)/2.0d0 + mag_field_z3 * rspauli3(:,:,3,ii)/2.0d0 + &
-                ! mag_field_x4 * rspauli4(:,:,1,ii)/2.0d0 + mag_field_y4 * rspauli4(:,:,2,ii)/2.0d0 + &
-                ! mag_field_z4 * rspauli4(:,:,3,ii)/2.0d0 + mag_field_x5 * rspauli5(:,:,1,ii)/2.0d0 + &
-                ! mag_field_y5 * rspauli5(:,:,2,ii)/2.0d0 + mag_field_z5 * rspauli5(:,:,3,ii)/2.0d0 + &
-                ! mag_field_x6 * rspauli6(:,:,1,ii)/2.0d0 + mag_field_y6 * rspauli6(:,:,2,ii)/2.0d0 + &
-                ! mag_field_z6 * rspauli6(:,:,3,ii)/2.0d0 + mag_field_x7 * rspauli7(:,:,1,ii)/2.0d0 + &
-                ! mag_field_y7 * rspauli7(:,:,2,ii)/2.0d0 + mag_field_z7 * rspauli7(:,:,3,ii)/2.0d0 + &
-                ! mag_field_x8 * rspauli8(:,:,1,ii)/2.0d0 + mag_field_y8 * rspauli8(:,:,2,ii)/2.0d0 + &
-                ! mag_field_z8 * rspauli8(:,:,3,ii)/2.0d0 
+                hops(:,:,ii) = hops(:,:,ii) + mag_field_x1 * rspauli1(:,:,1,ii)/2.0d0 + &
+                mag_field_y1 * rspauli1(:,:,2,ii)/2.0d0 + mag_field_z1 * rspauli1(:,:,3,ii)/2.0d0 + &
+                mag_field_x2 * rspauli2(:,:,1,ii)/2.0d0 + mag_field_y2 * rspauli2(:,:,2,ii)/2.0d0 + & 
+                mag_field_z2 * rspauli2(:,:,3,ii)/2.0d0 + mag_field_x3 * rspauli3(:,:,1,ii)/2.0d0 + &
+                mag_field_y3 * rspauli3(:,:,2,ii)/2.0d0 + mag_field_z3 * rspauli3(:,:,3,ii)/2.0d0 + &
+                mag_field_x4 * rspauli4(:,:,1,ii)/2.0d0 + mag_field_y4 * rspauli4(:,:,2,ii)/2.0d0 + &
+                mag_field_z4 * rspauli4(:,:,3,ii)/2.0d0 + mag_field_x5 * rspauli5(:,:,1,ii)/2.0d0 + &
+                mag_field_y5 * rspauli5(:,:,2,ii)/2.0d0 + mag_field_z5 * rspauli5(:,:,3,ii)/2.0d0 + &
+                mag_field_x6 * rspauli6(:,:,1,ii)/2.0d0 + mag_field_y6 * rspauli6(:,:,2,ii)/2.0d0 + &
+                mag_field_z6 * rspauli6(:,:,3,ii)/2.0d0 + mag_field_x7 * rspauli7(:,:,1,ii)/2.0d0 + &
+                mag_field_y7 * rspauli7(:,:,2,ii)/2.0d0 + mag_field_z7 * rspauli7(:,:,3,ii)/2.0d0 + &
+                mag_field_x8 * rspauli8(:,:,1,ii)/2.0d0 + mag_field_y8 * rspauli8(:,:,2,ii)/2.0d0 + &
+                mag_field_z8 * rspauli8(:,:,3,ii)/2.0d0 
             
                 !!! 这个是我又想出来的制造完美spiral然后再加 原始rspauli的方法2
 
-                rspauli_final(:,:,1,ii) = rspauli_final(:,:,1,ii) + mag_field_x1 * rspauli1(:,:,1,ii)/2.0d0 + &
-                mag_field_x2 * rspauli2(:,:,1,ii)/2.0d0 + mag_field_x3 * rspauli3(:,:,1,ii)/2.0d0 + &
-                mag_field_x4 * rspauli4(:,:,1,ii)/2.0d0 + mag_field_x5 * rspauli5(:,:,1,ii)/2.0d0 + &
-                mag_field_x6 * rspauli6(:,:,1,ii)/2.0d0 + mag_field_x7 * rspauli7(:,:,1,ii)/2.0d0 + &
-                mag_field_x8 * rspauli8(:,:,1,ii)/2.0d0
+            !     rspauli_final(:,:,1,ii) = rspauli_final(:,:,1,ii) + mag_field_x1 * rspauli1(:,:,1,ii)/2.0d0 + &
+            !     mag_field_x2 * rspauli2(:,:,1,ii)/2.0d0 + mag_field_x3 * rspauli3(:,:,1,ii)/2.0d0 + &
+            !     mag_field_x4 * rspauli4(:,:,1,ii)/2.0d0 + mag_field_x5 * rspauli5(:,:,1,ii)/2.0d0 + &
+            !     mag_field_x6 * rspauli6(:,:,1,ii)/2.0d0 + mag_field_x7 * rspauli7(:,:,1,ii)/2.0d0 + &
+            !     mag_field_x8 * rspauli8(:,:,1,ii)/2.0d0
 
-                rspauli_final(:,:,2,ii) = rspauli_final(:,:,2,ii) + mag_field_y1 * rspauli1(:,:,2,ii)/2.0d0 + &
-                mag_field_y2 * rspauli2(:,:,2,ii)/2.0d0 + mag_field_y3 * rspauli3(:,:,2,ii)/2.0d0 + &
-                mag_field_y4 * rspauli4(:,:,2,ii)/2.0d0 + mag_field_y5 * rspauli5(:,:,2,ii)/2.0d0 + &
-                mag_field_y6 * rspauli6(:,:,2,ii)/2.0d0 + mag_field_y7 * rspauli7(:,:,2,ii)/2.0d0 + &
-                mag_field_y8 * rspauli8(:,:,2,ii)/2.0d0
+            !     rspauli_final(:,:,2,ii) = rspauli_final(:,:,2,ii) + mag_field_y1 * rspauli1(:,:,2,ii)/2.0d0 + &
+            !     mag_field_y2 * rspauli2(:,:,2,ii)/2.0d0 + mag_field_y3 * rspauli3(:,:,2,ii)/2.0d0 + &
+            !     mag_field_y4 * rspauli4(:,:,2,ii)/2.0d0 + mag_field_y5 * rspauli5(:,:,2,ii)/2.0d0 + &
+            !     mag_field_y6 * rspauli6(:,:,2,ii)/2.0d0 + mag_field_y7 * rspauli7(:,:,2,ii)/2.0d0 + &
+            !     mag_field_y8 * rspauli8(:,:,2,ii)/2.0d0
 
-                rspauli_final(:,:,3,ii) = rspauli_final(:,:,3,ii) + mag_field_z1 * rspauli1(:,:,3,ii)/2.0d0 + &
-                mag_field_z2 * rspauli2(:,:,3,ii)/2.0d0 + mag_field_z3 * rspauli3(:,:,3,ii)/2.0d0 + &
-                mag_field_z4 * rspauli4(:,:,3,ii)/2.0d0 + mag_field_z5 * rspauli5(:,:,3,ii)/2.0d0 + &
-                mag_field_z6 * rspauli6(:,:,3,ii)/2.0d0 + mag_field_z7 * rspauli7(:,:,3,ii)/2.0d0 + &
-                mag_field_z8 * rspauli8(:,:,3,ii)/2.0d0
+            !     rspauli_final(:,:,3,ii) = rspauli_final(:,:,3,ii) + mag_field_z1 * rspauli1(:,:,3,ii)/2.0d0 + &
+            !     mag_field_z2 * rspauli2(:,:,3,ii)/2.0d0 + mag_field_z3 * rspauli3(:,:,3,ii)/2.0d0 + &
+            !     mag_field_z4 * rspauli4(:,:,3,ii)/2.0d0 + mag_field_z5 * rspauli5(:,:,3,ii)/2.0d0 + &
+            !     mag_field_z6 * rspauli6(:,:,3,ii)/2.0d0 + mag_field_z7 * rspauli7(:,:,3,ii)/2.0d0 + &
+            !     mag_field_z8 * rspauli8(:,:,3,ii)/2.0d0
 
-            enddo
-            do ii = 1,rvecnum
-                hops(:,:,ii)=hops(:,:,ii)+rspauli_final(:,:,1,ii)+rspauli_final(:,:,2,ii)+rspauli_final(:,:,3,ii) + &
-                rspauli_ori(:,:,1,ii)+rspauli_ori(:,:,2,ii)+rspauli_ori(:,:,3,ii)
-            enddo
+            ! enddo
+            ! do ii = 1,rvecnum
+            !     hops(:,:,ii)=hops(:,:,ii)+rspauli_final(:,:,1,ii)+rspauli_final(:,:,2,ii)+rspauli_final(:,:,3,ii) + &
+            !     rspauli_ori(:,:,1,ii)+rspauli_ori(:,:,2,ii)+rspauli_ori(:,:,3,ii)
+            ! enddo
         endif
     endif
      ! rspauli_final = 
