@@ -560,7 +560,7 @@ program anomalous_nernst_effect
             !     mag_field_z6 * rspauli6(:,:,3,ii)/2.0d0 + mag_field_z7 * rspauli7(:,:,3,ii)/2.0d0 + &
             !     mag_field_z8 * rspauli8(:,:,3,ii)/2.0d0
 
-            ! enddo
+            enddo
             ! do ii = 1,rvecnum
             !     hops(:,:,ii)=hops(:,:,ii)+rspauli_final(:,:,1,ii)+rspauli_final(:,:,2,ii)+rspauli_final(:,:,3,ii) + &
             !     rspauli_ori(:,:,1,ii)+rspauli_ori(:,:,2,ii)+rspauli_ori(:,:,3,ii)
