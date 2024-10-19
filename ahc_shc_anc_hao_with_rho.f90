@@ -6,7 +6,7 @@
       use pauli_comp
       use fermi_module       
       use slice_matrix
-           
+      use orbital_op
       implicit none 
                                                                         
       complex,allocatable:: hops   (:,:,:) 
@@ -16,7 +16,7 @@
       complex,allocatable:: paulifft(:,:,:) 
       complex,allocatable:: paulifft2(:,:,:) 
       complex,allocatable:: rho(:,:),rho_mpi(:,:)
-
+      complex(kind(1.0d0)), allocatable :: orbital_momentum(:,:,:,:)
       complex,allocatable:: rho_on_atom(:,:)
       real               :: rdum,idum 
       integer            :: ix,iy,iz,band1,band2,h,num_wann,m,n
@@ -124,17 +124,17 @@
          read(300,*)occupation_number 
          read(300,*)temperature
          read(300,*)l_mag_vec         
-         read(300,*)mag_strength                
-         read(300,*)mag_theta                        
-         read(300,*)mag_phi                          
-         read(300,*)mag_wann_num1
-         read(300,*)mag_wann_num2
-         allocate(mag_wann_orbs_index1(mag_wann_num1))
-         allocate(mag_wann_orbs_index2(mag_wann_num2))
-         read(300,*)mag_wann_orbs_index1
-         read(300,*)mag_wann_orbs_index2
-         write(*,*) mag_wann_orbs_index1
-         write(*,*) mag_wann_orbs_index2
+         ! read(300,*)mag_strength                
+         ! read(300,*)mag_theta                        
+         ! read(300,*)mag_phi                          
+         ! read(300,*)mag_wann_num1
+         ! read(300,*)mag_wann_num2
+         ! allocate(mag_wann_orbs_index1(mag_wann_num1))
+         ! allocate(mag_wann_orbs_index2(mag_wann_num2))
+         ! read(300,*)mag_wann_orbs_index1
+         ! read(300,*)mag_wann_orbs_index2
+         ! write(*,*) mag_wann_orbs_index1
+         ! write(*,*) mag_wann_orbs_index2
          close(300) 
          !print*, mag_wann_orbs_index
       endif 
@@ -160,9 +160,9 @@
       !call mpi_bcast(gamma,1,MPI_DOUBLE_PRECISION,0,mpi_comm_world,ierr)                             
       call mpi_bcast(bfield,3,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)        
       call mpi_bcast(l_mag_vec,1,MPI_LOGICAL,0,mpi_comm_world,ierr)
-      call mpi_bcast(mag_strength,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
-      call mpi_bcast(mag_theta,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
-      call mpi_bcast(mag_phi,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
+      ! call mpi_bcast(mag_strength,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
+      ! call mpi_bcast(mag_theta,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
+      ! call mpi_bcast(mag_phi,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
       ! call mpi_bcast(mag_wann_num1,1,MPI_INTEGER, 0,mpi_comm_world,ierr)
       ! call mpi_bcast(mag_wann_orbs_index1,mag_wann_num1,MPI_INTEGER,0,mpi_comm_world,ierr)
       ! call mpi_bcast(mag_wann_num2,1,MPI_INTEGER, 0,mpi_comm_world,ierr)
@@ -170,13 +170,13 @@
       call mpi_bcast(temperature,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
       call mpi_bcast(kbT,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
 
-      mag_field_x = mag_strength * cos(mag_theta)
-      mag_field_y = mag_strength * sin(mag_theta) * cos(mag_phi)
-      mag_field_z = mag_strength * sin(mag_theta) * sin(mag_phi)
+      ! mag_field_x = mag_strength * cos(mag_theta)
+      ! mag_field_y = mag_strength * sin(mag_theta) * cos(mag_phi)
+      ! mag_field_z = mag_strength * sin(mag_theta) * sin(mag_phi)
 
-      call mpi_bcast(mag_field_x,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
-      call mpi_bcast(mag_field_y,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
-      call mpi_bcast(mag_field_z,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
+      ! call mpi_bcast(mag_field_x,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
+      ! call mpi_bcast(mag_field_y,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
+      ! call mpi_bcast(mag_field_z,1,MPI_DOUBLE_PRECISION, 0,mpi_comm_world,ierr)
       
       if(irank.eq.0)then 
          open(200,file='hopping.1') 
@@ -259,14 +259,14 @@
       length=num_wann*num_wann*rvecnum*3
       call mpi_bcast(rspauli,length,MPI_DOUBLE_COMPLEX,0,mpi_comm_world,ierr)
 
-      if(l_bfield)then 
-         allocate(magnetic(3,num_steps)) 
-         allocate(paulifft(num_wann,num_wann,3)) 
-         allocate(paulifft2(num_wann,num_wann,3)) 
-         if(.not.allocated(rspauli)) allocate(rspauli(num_wann,num_wann,3,rvecnum))              
-         length=num_wann*num_wann*rvecnum*3 
-         call mpi_bcast(rspauli,length,MPI_DOUBLE_COMPLEX,0,mpi_comm_world,ierr)                             
-      endif 
+      ! if(l_bfield)then 
+      !    allocate(magnetic(3,num_steps)) 
+      !    allocate(paulifft(num_wann,num_wann,3)) 
+      !    allocate(paulifft2(num_wann,num_wann,3)) 
+      !    if(.not.allocated(rspauli)) allocate(rspauli(num_wann,num_wann,3,rvecnum))              
+      !    length=num_wann*num_wann*rvecnum*3 
+      !    call mpi_bcast(rspauli,length,MPI_DOUBLE_COMPLEX,0,mpi_comm_world,ierr)                             
+      ! endif 
                                                                                                                         
       cross(1)=amat(1,2)*amat(2,3)-amat(1,3)*amat(2,2) 
       cross(2)=amat(1,3)*amat(2,1)-amat(1,1)*amat(2,3) 
@@ -316,9 +316,9 @@
       allocate(Omega_x_shc(num_wann), Omega_y_shc(num_wann), Omega_z_shc(num_wann))
       allocate(Omega_x_t_shc(num_wann), Omega_y_t_shc(num_wann), Omega_z_t_shc(num_wann))
 
-      allocate(rho(num_wann,num_wann))
-      allocate(rho_mpi(num_wann,num_wann))
-      allocate(rho_on_atom(mag_wann_num1,mag_wann_num1)) 
+      ! allocate(rho(num_wann,num_wann))
+      ! allocate(rho_mpi(num_wann,num_wann))
+      ! allocate(rho_on_atom(mag_wann_num1,mag_wann_num1)) 
 
 
       rho = 0.0
@@ -359,18 +359,22 @@
       allocate( iwork(15*num_wann) ) 
       allocate( ifail(15*num_wann) ) 
 
-      if(irank == 0)then
-       if(l_mag_vec)then
-        do ii=1,rvecnum
-          do i=1,num_wann
-            do j=1,num_wann
-                hops(j,i,ii) = hops(j,i,ii) + mag_field_x * 0.5* rspauli(j,i,1,ii) + &
-                mag_field_y * 0.5* rspauli(j,i,2,ii) + mag_field_z * 0.5* rspauli(j,i,3,ii)
-            enddo !j
-          enddo !i
-        enddo
-      endif
-     endif
+   !    if(irank == 0)then
+   !     if(l_mag_vec)then
+   !      do ii=1,rvecnum
+   !        do i=1,num_wann
+   !          do j=1,num_wann
+   !              hops(j,i,ii) = hops(j,i,ii) + mag_field_x * 0.5* rspauli(j,i,1,ii) + &
+   !              mag_field_y * 0.5* rspauli(j,i,2,ii) + mag_field_z * 0.5* rspauli(j,i,3,ii)
+   !          enddo !j
+   !        enddo !i
+   !      enddo
+   !    endif
+   !   endif
+
+      if(irank == 0) then
+         call gen_orbital_matrix(num_wann,rvecnum,hops,orbital_momentum)
+
 
       time_start = 0.0
       knv3= Nk1*Nk2*Nk3
@@ -419,21 +423,23 @@
          ! 确保 eigvecs 和 fermi_array 的维度匹配
          ! rho(:,:) = rho(:,:) + matmul(eigvecs * diag(fermi_array(eigvals-efermi, Beta_fake)), eigvecs_dag) / knv3
          
-         fermi_values = fermi_array(eigvals-efermi, Beta_fake)
-         print *, "fermi_values:", fermi_values
-         print *, "here no problem0"
-         do j = 1, num_wann
-            do i = 1, num_wann
-               eigvecs_f(i, j) = eigvecs(i, j) * fermi_values(j)
-            end do
-         end do
+         ! fermi_values = fermi_array(eigvals-efermi, Beta_fake)
+         ! print *, "fermi_values:", fermi_values
+         ! print *, "here no problem0"
+         ! do j = 1, num_wann
+         !    do i = 1, num_wann
+         !       eigvecs_f(i, j) = eigvecs(i, j) * fermi_values(j)
+         !    end do
+         ! end do
 
-         print *, "here no problem1"
-         temp = matmul(eigvecs_f, eigvecs_dag) / knv3
-         print *, "here no problem2"
-         write(*,*) "eigvecs_f:", eigvecs_f
-         write(*,*) "temp:", temp
-         rho = rho + temp
+         ! print *, "here no problem1"
+         ! temp = matmul(eigvecs_f, eigvecs_dag) / knv3
+         ! print *, "here no problem2"
+         ! write(*,*) "eigvecs_f:", eigvecs_f
+         ! write(*,*) "temp:", temp
+         ! rho = rho + temp
+         !!!!!!!!!! get_rho_on_atom
+         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
          ! rho(:,:) = rho(:,:) + MATMUL(eigvecs, eigvecs_dag)/knv3
          ! write(*,*) "no idea"
          ! write(*,*) "knv3", knv3
@@ -516,9 +522,9 @@
  !                  Omega_z_t(m)= Omega_z(m)*(1.0/(temperature))*((eigvals(m)-mu)*fermi(eigvals(m)-mu, Beta_fake)+(kbT*log(1+exp(-(eigvals(m)-mu)/kbT))))
  !               endif
             
-                Omega_x_t(m)= Omega_x(m)*fermi(eigvals(m)-mu, Beta_fake)
-                Omega_y_t(m)= Omega_y(m)*fermi(eigvals(m)-mu, Beta_fake)
-                Omega_z_t(m)= Omega_z(m)*fermi(eigvals(m)-mu, Beta_fake)
+                Omega_x_t(m)= Omega_x(m)*fermi_old(eigvals(m)-mu, Beta_fake)
+                Omega_y_t(m)= Omega_y(m)*fermi_old(eigvals(m)-mu, Beta_fake)
+                Omega_z_t(m)= Omega_z(m)*fermi_old(eigvals(m)-mu, Beta_fake)
             enddo
                sigma_tensor_ahc_mpi(1, step)= sigma_tensor_ahc_mpi(1, step)+ real(sum(Omega_x_t))
                sigma_tensor_ahc_mpi(2, step)= sigma_tensor_ahc_mpi(2, step)+ real(sum(Omega_y_t))
@@ -654,20 +660,20 @@
                                                                                                                              
 end program ahc_shc_anc_hao
      
-! function fermi(omega, Beta_fake) result(value)
-!    implicit none
-!    real(kind(1.0d0)), intent(in) :: omega
-!    real(kind(1.0d0)), intent(in) :: Beta_fake
-!    real(kind(1.0d0)) :: value 
-!    if (Beta_fake*omega .ge. 20d0) then
-!       value = 0.0
-!    elseif (Beta_fake*omega .le. -20d0)then
-!       value = 1.0
-!    else
-!       value= 1.0/(1.0+exp(Beta_fake*omega))
-!    endif
-!    return
-! end function fermi    
+function fermi_old(omega, Beta_fake) result(value)
+   implicit none
+   real(kind(1.0d0)), intent(in) :: omega
+   real(kind(1.0d0)), intent(in) :: Beta_fake
+   real(kind(1.0d0)) :: value 
+   if (Beta_fake*omega .ge. 20d0) then
+      value = 0.0
+   elseif (Beta_fake*omega .le. -20d0)then
+      value = 1.0
+   else
+      value= 1.0/(1.0+exp(Beta_fake*omega))
+   endif
+   return
+end function fermi_old    
 
 
 ! function fermi_array(omega, Beta_fake) result(value)
