@@ -6,7 +6,7 @@
       use pauli_comp
       use fermi_module       
       use slice_matrix
-      use orbital_op
+      ! use orbital_op
       implicit none 
                                                                         
       complex,allocatable:: hops   (:,:,:) 
