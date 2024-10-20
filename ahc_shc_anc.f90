@@ -372,8 +372,8 @@
    !    endif
    !   endif
 
-      if(irank == 0) then
-         call gen_orbital_matrix(num_wann,rvecnum,hops,orbital_momentum)
+      ! if(irank == 0) then
+      !    call gen_orbital_matrix(num_wann,rvecnum,hops,orbital_momentum)
 
 
       time_start = 0.0
